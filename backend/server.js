@@ -18,7 +18,8 @@ connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
 })
 
-
+const lenderData = require('./data');
+app.use('/lenderData', lenderData);
 
 
 
