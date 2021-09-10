@@ -6,14 +6,12 @@ const lenderInfoSchema = new Schema({
   lender: {
     type: String,
     required: false,
-    unique: true,
     trim: true,
   },
   
   region: {
     type: String,
-    required: true,
-    minlength: 3
+    required: false,
   },
   city: {
     type: String,
@@ -44,7 +42,7 @@ const lenderInfoSchema = new Schema({
     required: false,
   },
   loanType: {
-    type: String,
+    type: [String],
     required: false,
   },
   maxLTV: {

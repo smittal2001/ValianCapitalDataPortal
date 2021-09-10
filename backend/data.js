@@ -1,13 +1,6 @@
 const router = require('express').Router();
 let LenderInfo = require('./data.model');
 
-//if there is a get request return all the users 
-// router.route('/').get((req, res) => {
-//   Course.find()
-//     .then(courses => res.json(courses))
-//     .catch(err => res.status(400).json('Error: ' + err));
-// });
-
 router.route('/add').post((req, res) => {
   const lender = req.body.lender;
   const region = req.body.region;
@@ -27,7 +20,7 @@ router.route('/add').post((req, res) => {
   const newLender = new LenderInfo({lender, region, city, contact, email, phone, notes, fee, loanType, maxLTV, interestRange, minCreditScore, maxAmortization, maxLoanAmount });
   newLender.save()
     .then(() => res.json('Lender added!'))
-    .catch(err => res.status(400).json('Error: ' + err));
+    .catch(err => res.status(400).json(`Error: ${err} Lender Data ${newLender}`));
 });
 
 module.exports = router;
