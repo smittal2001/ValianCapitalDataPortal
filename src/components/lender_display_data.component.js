@@ -19,15 +19,29 @@ export default class DisplayData extends Component {
             loanTypes += loanTypesArr[i] + "%20";
         }
         loanTypes += loanTypesArr[loanTypesArr.length-1];
+
+        const lenderArr = this.props.match.params.lender.split(" ")
+        var lender = "";
+        for(var i =0; i<lenderArr.length-1; i++) {
+            lender += lenderArr[i] + "%20";
+        }
+        lender += lenderArr[lenderArr.length-1];
+
+        const regionArr = this.props.match.params.region.split(" ")
+        var region = "";
+        for(var i =0; i<regionArr.length-1; i++) {
+            region += regionArr[i] + "%20";
+        }
+        region += regionArr[regionArr.length-1];
         
-        console.log('http://localhost:5000/lenderData/get/'+loanTypes)
-        axios.get('http://localhost:5000/lenderData/get/'+loanTypes)
+        console.log('http://localhost:5000/lenderData/get/'+loanTypes+"/"+this.props.match.params.lender+"/"+this.props.match.params.lender)
+        axios.get('http://localhost:5000/lenderData/get/'+loanTypes+"/"+this.props.match.params.lender+"/"+this.props.match.params.region)
         .then(response => {
             if(response.data.length > 0) {
                 this.setState({
-                    data : response.data.map(item => [item.lender, item.region, item.phone, item.maxLTV, item.notes, item._id.toString()])
-                    
+                    data : response.data.map(item => [item.lender, item.region, item.phone, item.maxLTV, item.notes, item.loanType, item._id.toString()])
                 })
+                console.log(this.state.data[0])
             }
             else {
                 console.log("no data");
@@ -37,14 +51,8 @@ export default class DisplayData extends Component {
         .catch((error) => {
             console.log(error);
         })
-      
     }
-    incrementCount= () => {
-        this.setState({
-          count:this.state.count+1
-        })
-      }
-
+   
     render() {
            return (
                 <div className = "container"> 
@@ -56,17 +64,19 @@ export default class DisplayData extends Component {
                                     <th scope="col">Phone Number </th>
                                     <th scope="col">Max LTV</th>
                                     <th scope="col">Notes</th>
+                                    {/* <th scope="col">Loan Types</th> */}
                                 </tr>
                             </thead>
                             <tbody>
                                 {
                                 this.state.data.map( item => (
-                                <tr task = { () => this.incrementCount() }>
+                                <tr>
                                     <td>{item[0]}</td>
                                     <td>{item[1]}</td>
                                     <td>{item[2]}</td>
                                     <td>{item[3]}</td>
                                     <td>{item[4]}</td>
+                                    {/* <td>{item[5]}</td> */}
                                   </tr> 
                                 ))}
                             </tbody>

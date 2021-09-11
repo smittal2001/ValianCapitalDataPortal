@@ -9,11 +9,11 @@ import DisplayData from "./components/lender_display_data.component"
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" style= {{backgroundColor: 'lightblue', padding: 50 }}>
 
       <Router>
         <Route exact path = "/"  component={LenderInfoData} />
-        <Route path = "/data/:loanTypes" component = {DisplayData} />
+        <Route path = "/data/:loanTypes/:lender/:region" component = {DisplayData} />
      </Router>
     </div>
   );
