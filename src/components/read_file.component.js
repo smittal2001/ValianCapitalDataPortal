@@ -28,8 +28,6 @@ export default class Readfile extends Component {
     ]
 
     for(let lenderInfo of data) {
-      
-      
       var loanType = [];
       if(lenderInfo["Conv. Lender"] === "X") {
          loanType.push("Conv. Lender")
@@ -128,7 +126,6 @@ export default class Readfile extends Component {
         maxLoanAmount: lenderInfo["Max Loan Amount"],
         loanType: loanType
       }
-      console.log("loant type: " + lenderData.loanType)
       console.log(lenderData);
       axios.post('http://localhost:5000/lenderData/add', lenderData)
           .then(res => console.log(res));

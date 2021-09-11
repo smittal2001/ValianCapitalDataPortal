@@ -23,4 +23,16 @@ router.route('/add').post((req, res) => {
     .catch(err => res.status(400).json(`Error: ${err} Lender Data ${newLender}`));
 });
 
+router.route('/get/:loanTypes').get((req, res) => {
+  const loanTypes = req.params.loanTypes.substring(0,req.params.loanTypes.length-1).split("-");
+
+  LenderInfo.find({ loanType: { $all: loanTypes }})
+    .then(items => {
+      res.json(items)
+      console.log(loanTypes)
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
+
 module.exports = router;
