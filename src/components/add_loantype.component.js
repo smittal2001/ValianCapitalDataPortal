@@ -35,7 +35,7 @@ export default class AddLoanType extends Component {
         const loanType = {
             loanType: this.state.loanType
         }
-        axios.post('http://localhost:5000/loanTypes/add', loanType)
+        axios.post('https://val-cap-backend.herokuapp.com//loanTypes/add', loanType)
             .then(res => console.log(res.data));
       }
 
