@@ -71,9 +71,9 @@ export default class LenderInfoData extends Component {
         } 
         else {
            return (
+               
                 <div className ="container" style = {{ backgroundColor: 'white', borderRadius:10, padding: 50}}>
-                    
-                    <h3>Get Lender Info </h3>
+                    <h1>Form</h1>
                     <form onSubmit={this.onSubmit} style = {{ padding: 15, textAlign: "left"}}>
                         <Row className="g-2">
                             <Form style = {{textAlign: "left"}}>
