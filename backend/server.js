@@ -21,7 +21,8 @@ connection.once('open', () => {
 const lenderData = require('./data');
 app.use('/lenderData', lenderData);
 
-
+const loanType = require('./loanType');
+app.use('/loanTypes', loanType);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
