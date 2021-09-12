@@ -127,7 +127,7 @@ export default class Readfile extends Component {
         loanType: loanType
       }
       console.log(lenderData);
-      axios.post('https://val-cap-backend.herokuapp.com//lenderData/add', lenderData)
+      axios.post('https://val-cap-backend.herokuapp.com/lenderData/add', lenderData)
           .then(res => console.log(res));
     }
   }

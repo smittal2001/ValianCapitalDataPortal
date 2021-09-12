@@ -34,8 +34,8 @@ export default class DisplayData extends Component {
         }
         region += regionArr[regionArr.length-1];
         
-        console.log('https://val-cap-backend.herokuapp.com//lenderData/get/'+loanTypes+"/"+this.props.match.params.lender+"/"+this.props.match.params.lender)
-        axios.get('https://val-cap-backend.herokuapp.com//lenderData/get/'+loanTypes+"/"+this.props.match.params.lender+"/"+this.props.match.params.region)
+        console.log('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.match.params.lender+"/"+this.props.match.params.lender)
+        axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.match.params.lender+"/"+this.props.match.params.region)
         .then(response => {
             if(response.data.length > 0) {
                 this.setState({
