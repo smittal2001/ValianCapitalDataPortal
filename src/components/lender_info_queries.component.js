@@ -11,11 +11,12 @@ export default class LenderInfoData extends Component {
         this.onChangeRegion = this.onChangeRegion.bind(this);
         this.onChangeLoanType = this.onChangeLoanType.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.onSearchAgain = this.onSearchAgain.bind(this);
 
         this.state = {
             recieved: false,
             lender: '',
-            region: 'Natioan wide',
+            region: 'None',
             loanTypeList: '',
 
         }
@@ -58,11 +59,21 @@ export default class LenderInfoData extends Component {
         console.log(this.state.loanTypeList)
         var recieved= this.state.recieved
         this.setState({
-            recieved:!recieved,
+            recieved:true,
         });
         // this.forceUpdate()
     }
-
+    onSearchAgain(e) {
+        e.preventDefault();
+        
+        this.setState({
+            recieved: false,
+            lender: '',
+            region: 'None',
+            loanTypeList: '',
+        });
+        // this.forceUpdate()
+    }
 
     render() {
 
@@ -72,7 +83,15 @@ export default class LenderInfoData extends Component {
               return(
                   <div style = {{  padding: 50}}>
                     <div className ="container" style = {{ backgroundColor: 'white', borderRadius:10, padding: 50}}>
-                        <button   onClick = {this.onSubmit} type="button" class="btn btn-secondary btn-lg btn-block">Search Again</button>
+                        <div style = {{textAlign:"left"}}>
+                            <strong>Results for:  </strong> 
+                            <br></br>
+                            Loan Types: <strong>{this.state.loanTypeList.substring(0,this.state.loanTypeList.length-1).replaceAll("-", ", ")} </strong>
+                            <br></br>
+                            Region: <strong>{this.state.region}</strong> 
+                        </div>
+                        
+                        <button   onClick = {this.onSearchAgain} type="button" class="btn btn-secondary btn-lg btn-block">Search Again</button>
                         <br></br>
                         <br></br>
                         <DisplayData loanTypes= {this.state.loanTypeList} region = {this.state.region}/>
@@ -102,7 +121,7 @@ export default class LenderInfoData extends Component {
                             onChange={this.onChangeRegion}
                             style = {{padding: 10}}>
                             {
-                                ['Natioan wide', 'TX'].map(function(region) {
+                                ['None','Natioan wide', 'TX'].map(function(region) {
                                     return <option 
                                         key={region}
                                         value={region}>{region}
@@ -115,7 +134,7 @@ export default class LenderInfoData extends Component {
                         "Lot Loans Res/Commercial 80% LTC", "Construction Notes LTC or completed Value", "Metal Buildings", "Residential Investment", 
                         "Residential Homestead", "Gas Stations", "MultiFamily", "Self Storage", "Retail Centers", "Mobile Home Parks", "NOTES RECEIVABLE", "Auto FloorPlans for Ind Dealers", "Aircraft and Yact", "Equipment Loans" ].map((type) => (
                             <div key={type} className="mb-3" >
-                                {/* <input
+                                <input
                                         inline
                                         value = {type}
                                         type="checkbox"
@@ -123,24 +142,24 @@ export default class LenderInfoData extends Component {
                                         ref="complete"
                                         onChange={this.onChangeLoanType}
                                         
-                                    /> */}
-                                    <Form.Check
+                                    />
+                                    {/* <Form.Check
                                         inline
                                         label={type}
                                         value = {type}
                                         name="group1"
                                         type="checkbox"
                                         id={`inline-${type}`}
-                                    />
-                                {/* <label style={{padding: 5}}>
+                                    /> */}
+                                <label style={{padding: 5}}>
                                 {type}
-                                </label> */}
+                                </label>
                             </div>
                         ))}
                         
                     </form>
                     {/* { this.state.recieved && <DisplayData loanTypes= {this.state.loanTypeList} region = {this.state.region}/>} */}
-                    {/* {this.state.loanTypeList} */}
+                   
                 </div>
                </div>
                

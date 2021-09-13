@@ -44,5 +44,16 @@ router.route('/get/:region').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/loanTypes/:loanTypes').get((req, res) => {
+  const loanTypes = req.params.loanTypes.substring(0,req.params.loanTypes.length-1).split("-");
+
+  LenderInfo.find({ loanType: { $all: loanTypes }})
+    .then(items => {
+      res.json(items)
+      console.log(req.params.region)
+      console.log(loanTypes)
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+});
 
 module.exports = router;

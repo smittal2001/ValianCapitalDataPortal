@@ -19,8 +19,9 @@ export default class DisplayData extends Component {
             loanTypes += loanTypesArr[i] + "%20";
         }
         loanTypes += loanTypesArr[loanTypesArr.length-1];
+        console.log(this.props.loanTypes)
         if(this.props.loanTypes==="") {
-            console.log('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.region)
+            
             axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+this.props.region)
             .then(response => {
                 if(response.data.length > 0) {
@@ -37,6 +38,27 @@ export default class DisplayData extends Component {
             .catch((error) => {
                 console.log(error);
             })
+        }
+        else if(this.props.region==="None"){
+           
+            console.log(loanTypes)
+            axios.get('https://val-cap-backend.herokuapp.com/lenderData/loanTypes/'+loanTypes)
+            .then(response => {
+                if(response.data.length > 0) {
+                    this.setState({
+                        data : response.data.map(item => [item.lender, item.region, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
+                    })
+                    console.log(this.state.data[0])
+                }
+                else {
+                    console.log("no data");
+                }
+                
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+            
         }
         else {
             console.log('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.region)
