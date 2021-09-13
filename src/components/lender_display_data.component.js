@@ -19,27 +19,13 @@ export default class DisplayData extends Component {
             loanTypes += loanTypesArr[i] + "%20";
         }
         loanTypes += loanTypesArr[loanTypesArr.length-1];
-
-        const lenderArr = this.props.match.params.lender.split(" ")
-        var lender = "";
-        for(var i =0; i<lenderArr.length-1; i++) {
-            lender += lenderArr[i] + "%20";
-        }
-        lender += lenderArr[lenderArr.length-1];
-
-        const regionArr = this.props.match.params.region.split(" ")
-        var region = "";
-        for(var i =0; i<regionArr.length-1; i++) {
-            region += regionArr[i] + "%20";
-        }
-        region += regionArr[regionArr.length-1];
         
-        console.log('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.match.params.lender+"/"+this.props.match.params.lender)
-        axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.match.params.lender+"/"+this.props.match.params.region)
+        console.log('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.match.params.region)
+        axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.match.params.region)
         .then(response => {
             if(response.data.length > 0) {
                 this.setState({
-                    data : response.data.map(item => [item.lender, item.region, item.phone, item.maxLTV, item.notes, item.loanType, item._id.toString()])
+                    data : response.data.map(item => [item.lender, item.region, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
                 })
                 console.log(this.state.data[0])
             }
@@ -61,8 +47,13 @@ export default class DisplayData extends Component {
                                 <tr>
                                     <th scope="col">Lender</th>
                                     <th scope="col">Region</th>
+                                    <th scope='col'> Contact </th>
                                     <th scope="col">Phone Number </th>
+                                    <th scope="col"> Interest Range </th>
+                                    <th scope="col"> Minimum Credit Score </th>
                                     <th scope="col">Max LTV</th>
+                                    <th scope='col'> Max Amortization (years)</th>
+                                    <th scope='col'> Max Loan Amount</th>
                                     <th scope="col">Notes</th>
                                     {/* <th scope="col">Loan Types</th> */}
                                 </tr>
@@ -76,6 +67,11 @@ export default class DisplayData extends Component {
                                     <td>{item[2]}</td>
                                     <td>{item[3]}</td>
                                     <td>{item[4]}</td>
+                                    <td>{item[5]}</td>
+                                    <td>{item[6]}</td>
+                                    <td>{item[7]}</td>
+                                    <td>{item[8]}</td>
+                                    <td>{item[9]}</td>
                                     {/* <td>{item[5]}</td> */}
                                   </tr> 
                                 ))}

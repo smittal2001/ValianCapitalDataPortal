@@ -15,7 +15,7 @@ export default class LenderInfoData extends Component {
         this.state = {
             recieved: false,
             lender: '',
-            region: '',
+            region: 'Natioan wide',
             loanTypeList: '',
 
         }
@@ -66,32 +66,31 @@ export default class LenderInfoData extends Component {
 
         if(this.state.recieved) {
            
-            return <Redirect to={"/data/" + this.state.loanTypeList + "/" + this.state.lender+ "/"+this.state.region} />
+            return <Redirect to={"/data/" + this.state.loanTypeList + "/"+this.state.region} />
               
         } 
         else {
            return (
                
                 <div className ="container" style = {{ backgroundColor: 'white', borderRadius:10, padding: 50}}>
-                    <h1>Form</h1>
+                    <h1> Get Lender Data </h1>
                     <form onSubmit={this.onSubmit} style = {{ padding: 15, textAlign: "left"}}>
-                        <Row className="g-2">
-                            <Form style = {{textAlign: "left"}}>
-                                <Col md>
-                                    <Form.Group className="mb-3" >
-                                        <Form.Label><strong>Lender</strong></Form.Label>
-                                        <Form.Control type="text" placeholder="Enter Lender Name"  onChange={this.onChangeLender} value={this.state.lender} />
-                                    </Form.Group>
-                                </Col>
-                                <Col md>
-                                    <Form.Group className="mb-3" >
-                                        <Form.Label><strong>Region</strong></Form.Label>
-                                        <Form.Control type="text" placeholder="Enter Region" onChange={this.onChangeRegion}  value={this.state.region}/>
-                                    </Form.Group>
-                                </Col>
-                            </Form>
-                            
-                        </Row>
+                        <label ><strong>Region</strong> </label>
+                        <select ref="userInput"
+                            required
+                            className="form-control"
+                            value={this.state.region}
+                            onChange={this.onChangeRegion}
+                            style = {{padding: 10}}>
+                            {
+                                ['Natioan wide', 'TX'].map(function(region) {
+                                    return <option 
+                                        key={region}
+                                        value={region}>{region}
+                                        </option>;
+                                    })
+                            }
+                        </select>
                         <Form.Label style = {{paddingTop: 10}}> <strong>Selct Loan Types</strong>  </Form.Label>
                         {["Conv. Lender", "SBA Lender", "Hotel Lender", "Asset Based Lender", "ABL Hybrid", "Private Money Lender", "Owner Occupied", "Non Owner Occupied", "Construction Notes LTC or completed Value", "Metal Buildings", "Retail Centers"].map((type) => (
                             <div key={type} className="mb-3" style = {{textAlign: "left"}}>

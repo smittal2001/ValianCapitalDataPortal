@@ -15,7 +15,7 @@ function App() {
       {/* <img src = {valcap} alt = "ValCap"/> */}
       <Router>
         <Route exact path = "/"  component={LenderInfoData} />
-        <Route path = "/data/:loanTypes/:lender/:region" component = {DisplayData} />
+        <Route path = "/data/:loanTypes/:region" component = {DisplayData} />
         <Route path = "/addLoanType" component = {AddLoanType} />
      </Router>
     </div>
