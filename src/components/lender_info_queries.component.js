@@ -84,7 +84,7 @@ export default class LenderInfoData extends Component {
                   <div style = {{  padding: 50}}>
                     <div className ="container" style = {{ backgroundColor: 'white', borderRadius:10, padding: 50}}>
                         <div style = {{textAlign:"left"}}>
-                            <strong>Results for:  </strong> 
+                            <strong>Search Results for:  </strong> 
                             <br></br>
                             Loan Types: <strong>{this.state.loanTypeList.substring(0,this.state.loanTypeList.length-1).replaceAll("-", ", ")} </strong>
                             <br></br>

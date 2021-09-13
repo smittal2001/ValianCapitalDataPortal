@@ -8,7 +8,7 @@ export default class DisplayData extends Component {
         super(props);
         this.state = {
             data: [[]],
-            count: 0
+            recieved: false,
         }
        
     }
@@ -26,6 +26,7 @@ export default class DisplayData extends Component {
             .then(response => {
                 if(response.data.length > 0) {
                     this.setState({
+                        recieved: true,
                         data : response.data.map(item => [item.lender, item.region, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
                     })
                     console.log(this.state.data[0])
@@ -46,6 +47,7 @@ export default class DisplayData extends Component {
             .then(response => {
                 if(response.data.length > 0) {
                     this.setState({
+                        recieved: true,
                         data : response.data.map(item => [item.lender, item.region, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
                     })
                     console.log(this.state.data[0])
@@ -66,6 +68,7 @@ export default class DisplayData extends Component {
             .then(response => {
                 if(response.data.length > 0) {
                     this.setState({
+                        recieved: true,
                         data : response.data.map(item => [item.lender, item.region, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
                     })
                     console.log(this.state.data[0])
@@ -83,7 +86,8 @@ export default class DisplayData extends Component {
     }
    
     render() {
-           return (
+        if(this.state.recieved) {
+            return (
                 <div className = "container" > 
                    <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa", 'borderStyle':'solid'}}  >
                             <thead>
@@ -135,6 +139,12 @@ export default class DisplayData extends Component {
 
 
            );
+        }
+        else
+        {
+            return <h1>No Search Results </h1>
+        }
+          
             
         
     }
