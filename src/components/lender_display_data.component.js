@@ -13,36 +13,57 @@ export default class DisplayData extends Component {
        
     }
     componentDidMount() {
-        const loanTypesArr = this.props.match.params.loanTypes.split(" ")
+        const loanTypesArr = this.props.loanTypes.split(" ")
         var loanTypes = "";
         for(var i =0; i<loanTypesArr.length-1; i++) {
             loanTypes += loanTypesArr[i] + "%20";
         }
         loanTypes += loanTypesArr[loanTypesArr.length-1];
+        if(this.props.loanTypes==="") {
+            console.log('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.region)
+            axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+this.props.region)
+            .then(response => {
+                if(response.data.length > 0) {
+                    this.setState({
+                        data : response.data.map(item => [item.lender, item.region, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
+                    })
+                    console.log(this.state.data[0])
+                }
+                else {
+                    console.log("no data");
+                }
+                
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        }
+        else {
+            console.log('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.region)
+            axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.region)
+            .then(response => {
+                if(response.data.length > 0) {
+                    this.setState({
+                        data : response.data.map(item => [item.lender, item.region, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
+                    })
+                    console.log(this.state.data[0])
+                }
+                else {
+                    console.log("no data");
+                }
+                
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        }
         
-        console.log('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.match.params.region)
-        axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.match.params.region)
-        .then(response => {
-            if(response.data.length > 0) {
-                this.setState({
-                    data : response.data.map(item => [item.lender, item.region, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
-                })
-                console.log(this.state.data[0])
-            }
-            else {
-                console.log("no data");
-            }
-            
-        })
-        .catch((error) => {
-            console.log(error);
-        })
     }
    
     render() {
            return (
-                <div className = "container"> 
-                   <table class="table">
+                <div className = "container" > 
+                   <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa", 'borderStyle':'solid'}}  >
                             <thead>
                                 <tr>
                                     <th scope="col">Lender</th>
@@ -62,16 +83,16 @@ export default class DisplayData extends Component {
                                 {
                                 this.state.data.map( item => (
                                 <tr>
-                                    <td>{item[0]}</td>
-                                    <td>{item[1]}</td>
-                                    <td>{item[2]}</td>
-                                    <td>{item[3]}</td>
-                                    <td>{item[4]}</td>
-                                    <td>{item[5]}</td>
-                                    <td>{item[6]}</td>
-                                    <td>{item[7]}</td>
-                                    <td>{item[8]}</td>
-                                    <td>{item[9]}</td>
+                                    <td>{item[0] === ""  ?  "None" : item[0]}</td>
+                                    <td>{item[1] === ""  ?  "None" : item[1]}</td>
+                                    <td>{item[2] === ""  ?  "None" : item[2]}</td>
+                                    <td>{item[3] === ""  ?  "None" : item[3]}</td>
+                                    <td>{item[4] === ""  ?  "None" : item[4]}</td>
+                                    <td>{item[5] === ""  ?  "None" : item[5]}</td>
+                                    <td>{item[6] === ""  ?  "None" : item[6]}</td>
+                                    <td>{item[7] === ""  ?  "None" : item[7]}</td>
+                                    <td>{item[8] === ""  ?  "None" : item[8] }</td>
+                                    <td>{item[9] === ""  ?  "None" : item[9]}</td>
                                     {/* <td>{item[5]}</td> */}
                                   </tr> 
                                 ))}

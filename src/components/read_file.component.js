@@ -47,7 +47,7 @@ export default class Readfile extends Component {
       if(lenderInfo["Private Money Lender"] === "X"){  
         loanType.push("Private Money Lender")
       }
-      if(lenderInfo["Factorin"] === "X"){  
+      if(lenderInfo["Factoring"] === "X"){  
         loanType.push("Factoring")
       }
       if(lenderInfo["Merchant Cash Advance"] === "X"){
