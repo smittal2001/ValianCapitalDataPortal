@@ -8,7 +8,7 @@ export default class DisplayData extends Component {
         super(props);
         this.state = {
             data: [[]],
-            recieved: false,
+            noData: false,
         }
        
     }
@@ -27,12 +27,16 @@ export default class DisplayData extends Component {
                 if(response.data.length > 0) {
                     this.setState({
                         recieved: true,
-                        data : response.data.map(item => [item.lender, item.region, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
+                        data : response.data.map(item => [item.lender, item.region, item.email, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
                     })
                     console.log(this.state.data[0])
                 }
                 else {
+                    
                     console.log("no data");
+                    this.setState({
+                        noData: true
+                    })
                 }
                 
             })
@@ -48,12 +52,15 @@ export default class DisplayData extends Component {
                 if(response.data.length > 0) {
                     this.setState({
                         recieved: true,
-                        data : response.data.map(item => [item.lender, item.region, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
+                        data : response.data.map(item => [item.lender, item.region, item.email, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
                     })
                     console.log(this.state.data[0])
                 }
                 else {
                     console.log("no data");
+                    this.setState({
+                        noData: true
+                    })
                 }
                 
             })
@@ -69,12 +76,15 @@ export default class DisplayData extends Component {
                 if(response.data.length > 0) {
                     this.setState({
                         recieved: true,
-                        data : response.data.map(item => [item.lender, item.region, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
+                        data : response.data.map(item => [item.lender, item.region, item.email, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
                     })
                     console.log(this.state.data[0])
                 }
                 else {
                     console.log("no data");
+                    this.setState({
+                        noData: true
+                    })
                 }
                 
             })
@@ -88,12 +98,13 @@ export default class DisplayData extends Component {
     render() {
         if(this.state.recieved) {
             return (
-                <div className = "container" > 
-                   <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa", 'borderStyle':'solid'}}  >
+                <div style={{padding: 50}} > 
+                   <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa", 'borderStyle':'solid', }}  >
                             <thead>
                                 <tr>
                                     <th scope="col">Lender</th>
                                     <th scope="col">Region</th>
+                                    <th scope="col">Email</th>
                                     <th scope='col'> Contact </th>
                                     <th scope="col">Phone Number </th>
                                     <th scope="col"> Interest Range </th>
@@ -109,16 +120,17 @@ export default class DisplayData extends Component {
                                 {
                                 this.state.data.map( item => (
                                 <tr>
-                                    <td>{item[0] === ""  ?  "None" : item[0]}</td>
+                                    <td style = {{'width':'300px'}}>{item[0] === ""  ?  "None" : item[0]}</td>
                                     <td>{item[1] === ""  ?  "None" : item[1]}</td>
                                     <td>{item[2] === ""  ?  "None" : item[2]}</td>
                                     <td>{item[3] === ""  ?  "None" : item[3]}</td>
-                                    <td>{item[4] === ""  ?  "None" : item[4]}</td>
+                                    <td style = {{'width':'300px'}}> {item[4] === ""  ?  "None" : item[4]}</td>
                                     <td>{item[5] === ""  ?  "None" : item[5]}</td>
                                     <td>{item[6] === ""  ?  "None" : item[6]}</td>
                                     <td>{item[7] === ""  ?  "None" : item[7]}</td>
                                     <td>{item[8] === ""  ?  "None" : item[8] }</td>
                                     <td>{item[9] === ""  ?  "None" : item[9]}</td>
+                                    <td style = {{'width':'700px'}}>{item[10] === ""  ?  "None" : item[10]}</td>
                                     {/* <td>{item[5]}</td> */}
                                   </tr> 
                                 ))}
@@ -140,9 +152,12 @@ export default class DisplayData extends Component {
 
            );
         }
+        else if(this.state.noData) {
+            return <h1>No Search Results </h1>
+        }
         else
         {
-            return <h1>No Search Results </h1>
+            return <h1> Loading... </h1>
         }
           
             

@@ -114,7 +114,7 @@ export default class Readfile extends Component {
         lender: lenderInfo["Lender"],
         region: lenderInfo["State"],
         city: lenderInfo["City"], 
-        contact: lenderInfo["Contract"], 
+        contact: lenderInfo["Contact"], 
         email: lenderInfo["Email"], 
         phone: lenderInfo["Phone"], 
         notes: lenderInfo["Notes"], 

@@ -81,8 +81,8 @@ export default class LenderInfoData extends Component {
            
             // return <Redirect to={"/data/" + this.state.loanTypeList + "/"+this.state.region} />
               return(
-                  <div style = {{  padding: 50}}>
-                    <div className ="container" style = {{ backgroundColor: 'white', borderRadius:10, padding: 50}}>
+                  <div style = {{  padding: 100}}>
+                    <div style = {{ backgroundColor: 'white', borderRadius:10, padding: 25}}>
                         <div style = {{textAlign:"left"}}>
                             <strong>Search Results for:  </strong> 
                             <br></br>
@@ -143,14 +143,6 @@ export default class LenderInfoData extends Component {
                                         onChange={this.onChangeLoanType}
                                         
                                     />
-                                    {/* <Form.Check
-                                        inline
-                                        label={type}
-                                        value = {type}
-                                        name="group1"
-                                        type="checkbox"
-                                        id={`inline-${type}`}
-                                    /> */}
                                 <label style={{padding: 5}}>
                                 {type}
                                 </label>

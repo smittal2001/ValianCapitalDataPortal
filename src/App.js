@@ -14,12 +14,11 @@ function App() {
   return (
     <div className="App" >
       <Helmet>
-                <style>{'body { background-color: #011d5e; }'}</style>
+                <style>{'body { background-color: #98c541; }'}</style>
         </Helmet>
       {/* <img src = {valcap} alt = "ValCap"/> */}
       <Router>
         <Route exact path = "/"  component={LenderInfoData} />
-        <Route path = "/data/:loanTypes/:region" component = {DisplayData} />
         <Route path = "/addLoanType" component = {AddLoanType} />
      </Router>
     </div>
