@@ -20,5 +20,15 @@ router.route('/').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/distinctLoanTypes').get((req, res) => {
+
+  LoanType.distinct("loanType")
+    .then(items => {
+      res.json(items)
+      
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
 
 module.exports = router;

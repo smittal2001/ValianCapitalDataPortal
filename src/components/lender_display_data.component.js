@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { ListGroup } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 
 
 export default class DisplayData extends Component {
@@ -96,47 +96,49 @@ export default class DisplayData extends Component {
     }
    
     render() {
+        var emails = this.state.data.map(item => item[2]);
         if(this.state.recieved) {
             return (
                 <div style={{padding: 50}} > 
-                   <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa", 'borderStyle':'solid', }}  >
-                            <thead>
-                                <tr>
-                                    <th scope="col">Lender</th>
-                                    <th scope="col">Region</th>
-                                    <th scope="col">Email</th>
-                                    <th scope='col'> Contact </th>
-                                    <th scope="col">Phone Number </th>
-                                    <th scope="col"> Interest Range </th>
-                                    <th scope="col"> Minimum Credit Score </th>
-                                    <th scope="col">Max LTV</th>
-                                    <th scope='col'> Max Amortization (years)</th>
-                                    <th scope='col'> Max Loan Amount</th>
-                                    <th scope="col">Notes</th>
-                                    {/* <th scope="col">Loan Types</th> */}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                this.state.data.map( item => (
-                                <tr>
-                                    <td style = {{'width':'300px'}}>{item[0] === ""  ?  "None" : item[0]}</td>
-                                    <td>{item[1] === ""  ?  "None" : item[1]}</td>
-                                    <td>{item[2] === ""  ?  "None" : item[2]}</td>
-                                    <td>{item[3] === ""  ?  "None" : item[3]}</td>
-                                    <td style = {{'width':'300px'}}> {item[4] === ""  ?  "None" : item[4]}</td>
-                                    <td>{item[5] === ""  ?  "None" : item[5]}</td>
-                                    <td>{item[6] === ""  ?  "None" : item[6]}</td>
-                                    <td>{item[7] === ""  ?  "None" : item[7]}</td>
-                                    <td>{item[8] === ""  ?  "None" : item[8] }</td>
-                                    <td>{item[9] === ""  ?  "None" : item[9]}</td>
-                                    <td style = {{'width':'700px'}}>{item[10] === ""  ?  "None" : item[10]}</td>
-                                    {/* <td>{item[5]}</td> */}
-                                  </tr> 
-                                ))}
-                            </tbody>
-                    </table>
+                
 
+                    <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa", 'borderStyle':'solid', }} >
+                        <thead>
+                            <tr>
+                                <th scope="col">Lender</th>
+                                <th scope="col">Region</th>
+                                <th scope="col">Email</th>
+                                <th scope='col'> Contact </th>
+                                <th scope="col">Phone Number </th>
+                                <th scope="col"> Interest Range </th>
+                                <th scope="col"> Minimum Credit Score </th>
+                                <th scope="col">Max LTV</th>
+                                <th scope='col'> Max Amortization (years)</th>
+                                <th scope='col'> Max Loan Amount</th>
+                                <th scope="col">Notes</th>
+                                {/* <th scope="col">Loan Types</th> */}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                            this.state.data.map( item => (
+                            <tr>
+                                <td style = {{'width':'300px'}}>{item[0] === ""  ?  "None" : item[0]}</td>
+                                <td>{item[1] === ""  ?  "None" : item[1]}</td>
+                                <td>{item[2] === ""  ?  "None" : item[2]}</td>
+                                <td>{item[3] === ""  ?  "None" : item[3]}</td>
+                                <td style = {{'width':'300px'}}> {item[4] === ""  ?  "None" : item[4]}</td>
+                                <td>{item[5] === ""  ?  "None" : item[5]}</td>
+                                <td>{item[6] === ""  ?  "None" : item[6]}</td>
+                                <td>{item[7] === ""  ?  "None" : item[7]}</td>
+                                <td>{item[8] === ""  ?  "None" : item[8] }</td>
+                                <td>{item[9] === ""  ?  "None" : item[9]}</td>
+                                <td style = {{'width':'700px'}}>{item[10] === ""  ?  "None" : item[10]}</td>
+                                {/* <td>{item[5]}</td> */}
+                                </tr> 
+                            ))}
+                        </tbody>
+                    </table>
                     {/* <h3>Loan Types</h3>
                     <ListGroup >
                         {this.state.loanTypes.map(item => (
