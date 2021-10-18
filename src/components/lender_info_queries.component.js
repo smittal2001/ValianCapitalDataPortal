@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import { Col, Form, Row, Button } from "react-bootstrap";
+import { Col, Form, Row } from "react-bootstrap";
 import axios from 'axios';
 import DisplayData from "./lender_display_data.component";
-import { findRenderedComponentWithType } from 'react-dom/cjs/react-dom-test-utils.development';
+import {Link} from 'react-router-dom';
 
 export default class LenderInfoData extends Component {
     constructor(props) {
@@ -187,9 +187,13 @@ export default class LenderInfoData extends Component {
            return (
                <div style = {{  padding: 50}}>
                      <div className ="container" style = {{ backgroundColor: 'white', borderRadius:10, padding: 50}}>
-                    <h1> Lender Info </h1>
+                    <h1> Lender Info </h1> 
+                    <br></br>
+                    <button  class="btn btn-grey btn-lg btn-block">  
+                            <Link to="/addLenderData" className="nav-link"> Click here to add Lender Data </Link> 
+                    </button>
                     <form onSubmit={this.onSubmit} style = {{ padding: 15, textAlign: "left"}}>
-                        
+                       
                         <br></br>
                         <label ><strong>Region</strong> </label>
                         <select ref="userInput"

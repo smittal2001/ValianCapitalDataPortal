@@ -157,7 +157,7 @@ export default class DisplayData extends Component {
                    
                     <button  style = {{float:'left'}} onClick = {this.copyText} type="button" class="btn btn-light btn-lg btn-block">Copy Selected</button>
                     <button  style = {{float:'right'}} onClick = {this.onSendEmails} type="button" class="btn btn-dark btn-lg btn-block">View Emails</button>   
-                    <button  style = {{float:'right'}} onClick = {this.onSendPhone} type="button" class="btn btn-dark btn-lg btn-block">View Phone Numbers</button>   
+                    <button  style = {{float:'right'}} onClick = {this.onSendPhone} type="button" class="btn btn-light btn-lg btn-block">View Phone Numbers</button>   
                     <br></br>
                     <div style={{padding:50}} > 
                         <Row>
