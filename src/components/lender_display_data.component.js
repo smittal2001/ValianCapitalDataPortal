@@ -10,13 +10,15 @@ export default class DisplayData extends Component {
         this.onHideEmails = this.onHideEmails.bind(this);
         this.onSendPhone = this.onSendPhone.bind(this);
         this.onHidePhone = this.onHidePhone.bind(this);
-
+        this.copyText = this.copyText.bind(this);
+        this.checkedBox = this.checkedBox.bind(this);
 
         this.state = {
             data: [[]],
             noData: false,
             showEmails: false,
-            showPhone: false
+            showPhone: false,
+            copyText: ""
         }
        
     }
@@ -125,16 +127,38 @@ export default class DisplayData extends Component {
             showPhone:false
         });
     }
-   
+    copyText(e) {
+        e.preventDefault();
+        //onClick={() => {navigator.clipboard.writeText(this.state.textToCopy)}}
+
+        navigator.clipboard.writeText(this.state.copyText)
+        alert("Copied text:\n" + this.state.copyText)
+        
+    }
+    checkedBox(e){
+        if(e.target.checked) {
+            this.state.copyText += e.target.value + "\n";
+        }
+        else {
+            var length = e.target.value.length;
+            var index = this.state.copyText.indexOf(e.target.value)
+            if(index != -1){
+                this.state.copyText = this.state.copyText.substring(0,index) + this.state.copyText.substring(index+length+1);
+                console.log("removed " + index + " " + this.state.copyText.substring(0,index))
+            }
+        }
+    }
     render() {
         // var emails = this.state.data.map(item => item[2]);
         if(this.state.recieved) {
             return (
                
-                <div style={{paddingLeft:25}}>
+                <div style={{paddingLeft:25}} >
                    
-                    <button  style = {{float:'left'}} onClick = {this.onSendEmails} type="button" class="btn btn-light btn-lg btn-block">View Emails</button>
-                    <button  style = {{float:'left'}} onClick = {this.onSendPhone} type="button" class="btn btn-dark btn-lg btn-block">View Phone Numbers</button>   
+                    <button  style = {{float:'left'}} onClick = {this.copyText} type="button" class="btn btn-light btn-lg btn-block">Copy Selected</button>
+                    <button  style = {{float:'right'}} onClick = {this.onSendEmails} type="button" class="btn btn-dark btn-lg btn-block">View Emails</button>   
+                    <button  style = {{float:'right'}} onClick = {this.onSendPhone} type="button" class="btn btn-dark btn-lg btn-block">View Phone Numbers</button>   
+                    <br></br>
                     <div style={{padding:50}} > 
                         <Row>
                             <Col sm={12}>
@@ -160,58 +184,70 @@ export default class DisplayData extends Component {
                                         this.state.data.map( item => (
                                         <tr>
                                             <td style = {{'width':'300px'}}>
-                                                <Button variant="light">
                                                     {item[0] === ""  ?  "None" : item[0]}
-                                                </Button>
                                             </td>
                                             <td>
-                                                <Button variant="light">
                                                     {item[1] === ""  ?  "None" : item[1]}
-                                                </Button>
                                             </td>
                                             <td>
-                                                <Button variant="light">
                                                     {item[3] === ""  ?  "None" : item[3]}
-                                                </Button>
                                             </td>
                                             <td >
-                                                    {item[2] === ""  ?  "None" : item[2]}
+                                                {item[2] === ""  ?  "None" : 
+                                                    <div>
+                                                        <input
+                                                            inline
+                                                            value = {item[2]}
+                                                            type="checkbox"
+                                                            defaultChecked={false}
+                                                            ref="complete"
+                                                            onChange={this.checkedBox}
+                                                        />
+                                                        <label style={{padding: 5}}>
+                                                            {item[2]}
+                                                        </label>
+                                                    </div>
+                                                }
                                             </td>
                                             <td style = {{'width':'300px'}}>
-                                                    {item[4] === ""  ?  "None" : item[4]}
+                                                {item[4] === ""  ?  "None" : 
+                                                    <div>
+                                                        <input
+                                                            inline
+                                                            value = {item[4]}
+                                                            type="checkbox"
+                                                            defaultChecked={false}
+                                                            ref="complete"
+                                                            onChange={this.checkedBox}
+                                                        />
+                                                        <label style={{padding: 5}}>
+                                                            {item[4]}
+                                                        </label>
+                                                    </div>
+                                                }
+                                                
+
                                             </td>
                                             <td>
-                                                <Button variant="light">
                                                     {item[5] === ""  ?  "None" : item[5]}
-                                                </Button>
                                             </td>
                                             <td>
-                                                <Button variant="light">
                                                     {item[6] === ""  ?  "None" : item[6]}
-                                                </Button>
                                                
                                             </td>
                                             <td>
-                                                <Button variant="light">
                                                     {item[7] === ""  ?  "None" : item[7]}
-                                                </Button>
                                                
                                             </td>
                                             <td>
-                                                <Button variant="light">
                                                     {item[8] === ""  ?  "None" : item[8]}
-                                                </Button>
                                                
                                             </td>
                                             <td>
-                                                <Button variant="light">
                                                     {item[9] === ""  ?  "None" : item[9]}
-                                                </Button>
                                             </td>
                                             <td>
-                                                <Button variant="light">
                                                     {item[10] === ""  ?  "None" : item[10]}
-                                                </Button>
                                             </td>
                                             {/* <td>{item[5]}</td> */}
                                             </tr> 

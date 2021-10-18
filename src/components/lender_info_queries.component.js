@@ -171,11 +171,8 @@ export default class LenderInfoData extends Component {
                             <br></br>
                             Region: <strong>{this.state.region}</strong> 
                         </div>
-                        <button onClick = {this.onSearchAgain} type="button" class="btn btn-secondary btn-lg btn-block">Search Again</button>
-                        
+                        <button style ={{}} onClick = {this.onSearchAgain} type="button" class="btn btn-secondary btn-lg btn-block">Search Again</button>
 
-                        
-                        <br></br>
                         <br></br>
                         <DisplayData loanTypes= {this.state.loanTypeList} region = {this.state.region}/>
                         
