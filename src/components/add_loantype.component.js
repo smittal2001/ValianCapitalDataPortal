@@ -178,7 +178,7 @@ export default class AddLoanType extends Component {
 
     render() {
         return (
-             <div class="container">
+             <div class="container" style = {{ backgroundColor: 'white', borderRadius:10, padding: 25}}>
                 <h3>Create New Lender Data </h3>
                 <form onSubmit={this.onSubmit}>
                     <Row className="g-2">
