@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Col, Form, Row, Button } from "react-bootstrap";
 import axios from 'axios';
 import DisplayData from "./lender_display_data.component";
+import { findRenderedComponentWithType } from 'react-dom/cjs/react-dom-test-utils.development';
 
 export default class LenderInfoData extends Component {
     constructor(props) {
@@ -18,14 +19,13 @@ export default class LenderInfoData extends Component {
 
         this.state = {
             regions: [],
-            username: '',
             password: '',
             loggedIn: false,
             recieved: false,
             lender: '',
             region: 'None',
             loanTypeList: '',
-
+            loanTypes: []
         }
        
     }
@@ -43,6 +43,17 @@ export default class LenderInfoData extends Component {
             console.log(error);
         })
         
+        axios.get('https://val-cap-backend.herokuapp.com/loanTypes/distinctLoanTypes')
+        .then(response => {
+            if(response.data.length > 0) {
+                this.setState({
+                    loanTypes : response.data
+                })
+            }  
+        })
+        .catch((error) => {
+            console.log(error);
+        })
 
       }
     
@@ -109,13 +120,13 @@ export default class LenderInfoData extends Component {
     onLogIn(e) {
         e.preventDefault();
         console.log(this.state.loggedIn)
-        if(this.state.username === "ValCap" && this.state.password === "ValCap") {
+        if(this.state.password === "ValCap") {
             this.setState({
                 loggedIn:true
             });
         }
         else {
-            alert("Invalid Username or Password Try again")
+            alert("Invalid Password Try again")
             this.setState({
                 password:''
             });
@@ -129,22 +140,12 @@ export default class LenderInfoData extends Component {
                     <h1 style = {{color:"white"}}>Welcome to the Lender Info Data Portal</h1>
                     <div style={{width:"50%", padding:50, margin: "0 auto", backgroundColor: "white", transform: "translateY(40%)", borderRadius:10}}>
                         <form onSubmit = {this.onLogIn}>
-                            <label style= {{padding: 10}}>Username:</label>
-                            <input
-                                inline
-                                value = {this.state.username}
-                                type="text"
-                                onChange={this.onChangeUsername}
-                                
-                            />
-                            <br></br>
                             <label  style= {{padding: 10}}>Password:</label>
                             <input
                                 inline
                                 value = {this.state.password}
                                 type="password"
                                 onChange={this.onChangePassword}
-                                
                             />
                             <br></br>
                             <input type="submit" value="Log In" className="btn btn-primary" />
@@ -170,8 +171,10 @@ export default class LenderInfoData extends Component {
                             <br></br>
                             Region: <strong>{this.state.region}</strong> 
                         </div>
+                        <button onClick = {this.onSearchAgain} type="button" class="btn btn-secondary btn-lg btn-block">Search Again</button>
                         
-                        <button   onClick = {this.onSearchAgain} type="button" class="btn btn-secondary btn-lg btn-block">Search Again</button>
+
+                        
                         <br></br>
                         <br></br>
                         <DisplayData loanTypes= {this.state.loanTypeList} region = {this.state.region}/>
@@ -187,7 +190,7 @@ export default class LenderInfoData extends Component {
            return (
                <div style = {{  padding: 50}}>
                      <div className ="container" style = {{ backgroundColor: 'white', borderRadius:10, padding: 50}}>
-                    <h1> Get Lender Data </h1>
+                    <h1> Lender Info </h1>
                     <form onSubmit={this.onSubmit} style = {{ padding: 15, textAlign: "left"}}>
                         
                         <br></br>
@@ -209,9 +212,7 @@ export default class LenderInfoData extends Component {
                         </select>
                         <Form.Label style = {{paddingTop: 10}}> <strong>Selct Loan Types</strong>  </Form.Label>
                             <Row xs={3}>
-                            {["Conv. Lender", "SBA Lender", "Hotel Lender", "Asset Based Lender", "ABL Hybrid", "Private Money Lender", "Factoring", "Merchant Cash Advance", "Unsecured Lending", "504 Program", "7(a)Program", "Owner Occupied", "Non Owner Occupied", 
-                            "Lot Loans Res/Commercial 80% LTC", "Construction Notes LTC or completed Value", "Metal Buildings", "Residential Investment", 
-                            "Residential Homestead", "Gas Stations", "MultiFamily", "Self Storage", "Retail Centers", "Mobile Home Parks", "NOTES RECEIVABLE", "Auto FloorPlans for Ind Dealers", "Aircraft and Yact", "Equipment Loans" ].map((type) => (
+                            {this.state.loanTypes.map((type) => (
                                 <div key={type} className="mb-3" >
                                 
                                         <Col>

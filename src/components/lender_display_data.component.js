@@ -1,14 +1,22 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { Row, Col } from "react-bootstrap";
+import { Modal, Row, Col, Button} from "react-bootstrap";
 
 
 export default class DisplayData extends Component {
     constructor(props) {
         super(props);
+        this.onSendEmails = this.onSendEmails.bind(this);
+        this.onHideEmails = this.onHideEmails.bind(this);
+        this.onSendPhone = this.onSendPhone.bind(this);
+        this.onHidePhone = this.onHidePhone.bind(this);
+
+
         this.state = {
             data: [[]],
             noData: false,
+            showEmails: false,
+            showPhone: false
         }
        
     }
@@ -92,61 +100,199 @@ export default class DisplayData extends Component {
                 console.log(error);
             })
         }
-        
+    }
+    onSendEmails(e) {
+        e.preventDefault();
+        this.setState({
+            showEmails:true
+        });
+    }
+    onHideEmails(e) {
+        e.preventDefault();
+        this.setState({
+            showEmails:false
+        });
+    }
+    onSendPhone(e) {
+        e.preventDefault();
+        this.setState({
+            showPhone:true
+        });
+    }
+    onHidePhone(e) {
+        e.preventDefault();
+        this.setState({
+            showPhone:false
+        });
     }
    
     render() {
-        var emails = this.state.data.map(item => item[2]);
+        // var emails = this.state.data.map(item => item[2]);
         if(this.state.recieved) {
             return (
-                <div style={{padding: 50}} > 
-                
-
-                    <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa", 'borderStyle':'solid', }} >
-                        <thead>
-                            <tr>
-                                <th scope="col">Lender</th>
-                                <th scope="col">Region</th>
-                                <th scope="col">Email</th>
-                                <th scope='col'> Contact </th>
-                                <th scope="col">Phone Number </th>
-                                <th scope="col"> Interest Range </th>
-                                <th scope="col"> Minimum Credit Score </th>
-                                <th scope="col">Max LTV</th>
-                                <th scope='col'> Max Amortization (years)</th>
-                                <th scope='col'> Max Loan Amount</th>
-                                <th scope="col">Notes</th>
-                                {/* <th scope="col">Loan Types</th> */}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                            this.state.data.map( item => (
-                            <tr>
-                                <td style = {{'width':'300px'}}>{item[0] === ""  ?  "None" : item[0]}</td>
-                                <td>{item[1] === ""  ?  "None" : item[1]}</td>
-                                <td>{item[2] === ""  ?  "None" : item[2]}</td>
-                                <td>{item[3] === ""  ?  "None" : item[3]}</td>
-                                <td style = {{'width':'300px'}}> {item[4] === ""  ?  "None" : item[4]}</td>
-                                <td>{item[5] === ""  ?  "None" : item[5]}</td>
-                                <td>{item[6] === ""  ?  "None" : item[6]}</td>
-                                <td>{item[7] === ""  ?  "None" : item[7]}</td>
-                                <td>{item[8] === ""  ?  "None" : item[8] }</td>
-                                <td>{item[9] === ""  ?  "None" : item[9]}</td>
-                                <td style = {{'width':'700px'}}>{item[10] === ""  ?  "None" : item[10]}</td>
-                                {/* <td>{item[5]}</td> */}
-                                </tr> 
-                            ))}
-                        </tbody>
-                    </table>
-                    {/* <h3>Loan Types</h3>
-                    <ListGroup >
-                        {this.state.loanTypes.map(item => (
-                             <ListGroup.Item>{item}</ListGroup.Item>                            
-                        ))}
-
-                    </ListGroup> */}
+               
+                <div style={{paddingLeft:25}}>
+                   
+                    <button  style = {{float:'left'}} onClick = {this.onSendEmails} type="button" class="btn btn-light btn-lg btn-block">View Emails</button>
+                    <button  style = {{float:'left'}} onClick = {this.onSendPhone} type="button" class="btn btn-dark btn-lg btn-block">View Phone Numbers</button>   
+                    <div style={{padding:50}} > 
+                        <Row>
+                            <Col sm={12}>
+                                <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa",  }} >
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Lender</th>
+                                            <th scope="col">Region</th>
+                                            <th scope='col'> Contact </th>
+                                            <th scope='col'> Email </th>
+                                            <th scope='col'> Phone Number </th>
+                                            <th scope="col"> Interest Range </th>
+                                            <th scope="col"> Minimum Credit Score </th>
+                                            <th scope="col">Max LTV</th>
+                                            <th scope='col'> Max Amortization (years)</th>
+                                            <th scope='col'> Max Loan Amount</th>
+                                            <th scope="col">Notes</th>
+                                            {/* <th scope="col">Loan Types</th> */}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                        this.state.data.map( item => (
+                                        <tr>
+                                            <td style = {{'width':'300px'}}>
+                                                <Button variant="light">
+                                                    {item[0] === ""  ?  "None" : item[0]}
+                                                </Button>
+                                            </td>
+                                            <td>
+                                                <Button variant="light">
+                                                    {item[1] === ""  ?  "None" : item[1]}
+                                                </Button>
+                                            </td>
+                                            <td>
+                                                <Button variant="light">
+                                                    {item[3] === ""  ?  "None" : item[3]}
+                                                </Button>
+                                            </td>
+                                            <td >
+                                                    {item[2] === ""  ?  "None" : item[2]}
+                                            </td>
+                                            <td style = {{'width':'300px'}}>
+                                                    {item[4] === ""  ?  "None" : item[4]}
+                                            </td>
+                                            <td>
+                                                <Button variant="light">
+                                                    {item[5] === ""  ?  "None" : item[5]}
+                                                </Button>
+                                            </td>
+                                            <td>
+                                                <Button variant="light">
+                                                    {item[6] === ""  ?  "None" : item[6]}
+                                                </Button>
+                                               
+                                            </td>
+                                            <td>
+                                                <Button variant="light">
+                                                    {item[7] === ""  ?  "None" : item[7]}
+                                                </Button>
+                                               
+                                            </td>
+                                            <td>
+                                                <Button variant="light">
+                                                    {item[8] === ""  ?  "None" : item[8]}
+                                                </Button>
+                                               
+                                            </td>
+                                            <td>
+                                                <Button variant="light">
+                                                    {item[9] === ""  ?  "None" : item[9]}
+                                                </Button>
+                                            </td>
+                                            <td>
+                                                <Button variant="light">
+                                                    {item[10] === ""  ?  "None" : item[10]}
+                                                </Button>
+                                            </td>
+                                            {/* <td>{item[5]}</td> */}
+                                            </tr> 
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </Col>
+                        </Row>
+                    </div>
+                    <Modal show={this.state.showEmails} onHide={this.state.showEmails}>
+                        <Modal.Footer>
+                        <Button variant="secondary" onClick={this.onHideEmails}>
+                            Close
+                        </Button>
+                        </Modal.Footer>
+                        <Modal.Body>
+                            <div  style = {{display:'flex'}}>
+                                <div  style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, margin:5, marginRight:5, width:"30%"}}>
+                                    <div style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, height:60 , padding:15}} > <strong>Lender</strong></div>
+                                    {
+                                    this.state.data.map( item => (
+                                        <div style = {{ height:60, margin:5, marginLeft:"5.5%"}}>
+                                            {item[0] ==="" || item[0] === " "  ?  "None" : item[0]}
+                                        </div> 
+                                    ))}
+                                </div>
+                                
+                                <div  style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, margin:5, marginRight:5, width:"70%"}}>
+                                <div style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, height:60 , padding:15}} > <strong>Emails</strong></div>
+                                    {
+                                    this.state.data.map( item => (
+                                        <div style = {{ height:60, margin:5, marginLeft:"5.5%"}}>
+                                            {item[2] ==="" || item[2] === " "  ?  "None" : item[2]}
+                                        </div> 
+                                    ))}
+                                </div>
+                            </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                        <Button variant="secondary" onClick={this.onHideEmails}>
+                            Close
+                        </Button>
+                        </Modal.Footer>
+                    </Modal>
+                    <Modal show={this.state.showPhone} onHide={this.state.showPhone}>
+                        <Modal.Footer>
+                        <Button variant="secondary" onClick={this.onHidePhone}>
+                            Close
+                        </Button>
+                        </Modal.Footer>
+                        <Modal.Body>
+                            <div  style = {{display:'flex'}}>
+                                <div  style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, margin:5, marginRight:5, width:"30%"}}>
+                                    <div style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, height:60 , padding:15}} > <strong>Lender</strong></div>
+                                    {
+                                    this.state.data.map( item => (
+                                        <div style = {{ height:60, margin:5, marginLeft:"5.5%"}}>
+                                            {item[0] ==="" || item[0] === " "  ?  "None" : item[0]}
+                                        </div> 
+                                    ))}
+                                </div>
+                                
+                                <div  style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, margin:5, marginRight:5, width:"70%"}}>
+                                <div style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, height:60 , padding:15}} > <strong>Phone Numbers</strong></div>
+                                    {
+                                    this.state.data.map( item => (
+                                        <div style = {{ height:60, margin:5, marginLeft:"5.5%"}}>
+                                            {item[4] ==="" || item[4] === " "  ?  "None" : item[4]}
+                                        </div> 
+                                    ))}
+                                </div>
+                            </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                        <Button variant="secondary" onClick={this.onHidePhone}>
+                            Close
+                        </Button>
+                        </Modal.Footer>
+                    </Modal>
                 </div>
+                
 
 
          
@@ -166,3 +312,23 @@ export default class DisplayData extends Component {
         
     }
 }
+
+
+// <Col sm={2}>
+//                         <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa", 'borderStyle':'solid', }}>
+//                         <thead>
+//                                 <tr>
+//                                     <th style={{lineHeight:4, fontSize:18}} scope="col">Phone Number</th>
+//                                     {/* <th scope="col">Loan Types</th> */}
+//                                 </tr>
+//                             </thead>
+//                             <tbody>
+//                                 {
+//                                 this.state.data.map( item => (
+//                                     <tr>
+//                                         <td style={{lineHeight:3}}>{item[4] === ""  ?  "None" : item[4]}</td>
+//                                     </tr> 
+//                                 ))}
+//                             </tbody>
+//                         </table>
+//                     </Col>
