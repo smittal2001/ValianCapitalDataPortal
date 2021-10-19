@@ -100,7 +100,6 @@ export default class LenderInfoData extends Component {
     onSubmit(e) {
         e.preventDefault();
         console.log(this.state.loanTypeList)
-        var recieved= this.state.recieved
         this.setState({
             recieved:true,
         });
@@ -120,7 +119,7 @@ export default class LenderInfoData extends Component {
     onLogIn(e) {
         e.preventDefault();
         console.log(this.state.loggedIn)
-        if(this.state.password === "ValCap") {
+        if(this.state.password === "Valiant1234!") {
             this.setState({
                 loggedIn:true
             });
@@ -152,11 +151,7 @@ export default class LenderInfoData extends Component {
                         </form>
                     </div>
                 </div>
-                
-                
             );
-
-            
         }
         else if(this.state.recieved) {
            
