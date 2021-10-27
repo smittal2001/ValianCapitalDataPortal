@@ -25,7 +25,18 @@ export default class LenderInfoData extends Component {
             lender: '',
             region: 'None',
             loanTypeList: '',
-            loanTypes: []
+            loanTypes: [],
+            newRegion: "",
+            newLender: '',
+            email: '',
+            contact: '',
+            phoneNum: '',
+            interestRange: '',
+            minCredScore: '',
+            maxLTV: '',
+            maxAmort: '',
+            maxLoanAmt: '',
+            notes: ''
         }
        
     }

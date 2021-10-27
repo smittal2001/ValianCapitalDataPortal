@@ -3,7 +3,7 @@ import { Col, Form, Row } from "react-bootstrap";
 
 import axios from 'axios';
 
-export default class AddLoanType extends Component {
+export default class AddLenderData extends Component {
     constructor(props) {
         super(props);
 

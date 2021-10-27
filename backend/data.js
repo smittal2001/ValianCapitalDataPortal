@@ -66,5 +66,41 @@ router.route('/getRegions').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/update/:id').post((req, res) => {
+  var updateFields = [];
+  updateFields.push(["lender",req.body.lender]);
+  updateFields.push(["region", req.body.region]);
+  updateFields.push(["contact", req.body.contact]);
+  updateFields.push(["email", req.body.email]);
+  updateFields.push(["phone", req.body.phone]);
+  updateFields.push(["notes", req.body.notes]);
+  updateFields.push(["loanType",req.body.loanType]);
+  updateFields.push(["maxLTV",req.body.maxLTV]);
+  updateFields.push(["interestRange", req.body.interestRange]);
+  updateFields.push(["minCreditScore", req.body.minCreditScore]);
+  updateFields.push(["maxAmortization",req.body.maxAmort]);
+  updateFields.push(["maxLoanAmount", req.body.maxLoanAmt]);
+  console.log(updateFields);
+
+
+  LenderInfo.findById(req.params.id)
+  .then(document => {
+    updateFields.forEach(field => {
+    
+      console.log(field);
+      document[field[0]] = field[1];
+    }
+    );
+    document.save()
+      .then(() => res.json('Lender Data updated!'))
+      .catch(err => res.status(400).json('Error: ' + err));
+  })  
+});
+router.route('/delete/:id').delete((req, res) => {
+  LenderInfo.findByIdAndDelete(req.params.id)
+    .then(() => res.json('Lender Data deleted.'))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
 
 module.exports = router;
