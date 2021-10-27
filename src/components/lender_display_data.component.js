@@ -248,7 +248,7 @@ export default class DisplayData extends Component {
 
     }
     onDelete() {
-        axios.delete('http://localhost:5000/lenderData/delete/' + this.state._id)
+        axios.delete('https://val-cap-backend.herokuapp.com/lenderData/delete/' + this.state._id)
                 .then(res => console.log(res.data));
         this.setState({
             showEdit:false,
@@ -281,7 +281,7 @@ export default class DisplayData extends Component {
             maxLoanAmt: this.state.maxLoanAmt,
             notes: this.state.notes
         }
-        axios.post('http://localhost:5000/lenderData/update/' + this.state._id, lenderData)
+        axios.post('https://val-cap-backend.herokuapp.com/lenderData/update/' + this.state._id, lenderData)
                 .then(res => console.log(res.data));
         this.setState({
             showEdit:false,
