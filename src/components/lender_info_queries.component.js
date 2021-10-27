@@ -144,27 +144,7 @@ export default class LenderInfoData extends Component {
     }
 
     render() {
-        if(!this.state.loggedIn) {
-            return (
-                <div className= "container" style={{padding:80}}>
-                    <h1 style = {{color:"white"}}>Welcome to the Lender Info Data Portal</h1>
-                    <div style={{width:"50%", padding:50, margin: "0 auto", backgroundColor: "white", transform: "translateY(40%)", borderRadius:10}}>
-                        <form onSubmit = {this.onLogIn}>
-                            <label  style= {{padding: 10}}>Password:</label>
-                            <input
-                                inline
-                                value = {this.state.password}
-                                type="password"
-                                onChange={this.onChangePassword}
-                            />
-                            <br></br>
-                            <input type="submit" value="Log In" className="btn btn-primary" />
-                        </form>
-                    </div>
-                </div>
-            );
-        }
-        else if(this.state.recieved) {
+     if(this.state.recieved) {
            
             // return <Redirect to={"/data/" + this.state.loanTypeList + "/"+this.state.region} />
               return(

@@ -6,6 +6,7 @@ import {Helmet} from 'react-helmet';
 
 import AddLenderData from "./components/add_lender_data.component.js"
 import LenderInfoData from './components/lender_info_queries.component'
+import LandingPage from './components/landing_page.component'
 
 
 function App() {
@@ -15,7 +16,8 @@ function App() {
                 <style>{'body { background-color: #98c541; }'}</style>
         </Helmet>
       <Router>
-        <Route exact path = "/"  component={LenderInfoData} />
+        <Route exact path = "/"  component={LandingPage} />
+        <Route exact path = "/getLenderData"  component={LenderInfoData} />
         <Route path = "/addLenderData" component = {AddLenderData} />
      </Router>
     </div>
