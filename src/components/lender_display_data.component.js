@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { Modal, Row, Col, Button} from "react-bootstrap";
+import { Modal, Row, Col, Button, Form} from "react-bootstrap";
 
 
 export default class DisplayData extends Component {
@@ -10,15 +10,45 @@ export default class DisplayData extends Component {
         this.onHideEmails = this.onHideEmails.bind(this);
         this.onSendPhone = this.onSendPhone.bind(this);
         this.onHidePhone = this.onHidePhone.bind(this);
+        this.onSendEdit = this.onSendEdit.bind(this);
+        this.onDelete = this.onDelete.bind(this);
+        this.onHideEdit = this.onHideEdit.bind(this);
         this.copyText = this.copyText.bind(this);
         this.checkedBox = this.checkedBox.bind(this);
+        this.onChangeRegion = this.onChangeRegion.bind(this);
+        this.onChangeLender = this.onChangeLender.bind(this);
+        this.onChangeEmail = this.onChangeEmail.bind(this);
+        this.onChangeContact= this.onChangeContact.bind(this);
+        this.onChangeInterestRange = this.onChangeInterestRange.bind(this);
+        this.onChangePhoneNum = this.onChangePhoneNum.bind(this);
+        this.onChangeMinCredScore = this.onChangeMinCredScore.bind(this);
+        this.onChangeMaxLTV = this.onChangeMaxLTV.bind(this);
+        this.onChangeMaxLoanAmt = this.onChangeMaxLoanAmt.bind(this);
+        this.onChangeMaxAmort = this.onChangeMaxAmort.bind(this);
+        this.onChangeNotes = this.onChangeNotes.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+
 
         this.state = {
             data: [[]],
             noData: false,
             showEmails: false,
             showPhone: false,
-            copyText: ""
+            copyText: "",
+            showEdit: false,
+            _id: "",
+            region: "",
+            lender: '',
+            email: '',
+            contact: '',
+            phoneNum: '',
+            interestRange: '',
+            minCredScore: '',
+            maxLTV: '',
+            maxAmort: '',
+            maxLoanAmt: '',
+            notes: ''
+            
         }
        
     }
@@ -103,6 +133,72 @@ export default class DisplayData extends Component {
             })
         }
     }
+    onChangeRegion(e)
+    {
+        this.setState({
+            region: e.target.value
+        });
+    }
+    onChangeLender(e)
+    {
+        this.setState({
+            lender: e.target.value
+        });
+    }
+    onChangeEmail(e)
+    {
+        this.setState({
+            email: e.target.value
+        });
+    }
+    onChangeContact(e)
+    {
+        this.setState({
+            contact: e.target.value
+        });
+    }
+    onChangePhoneNum(e)
+    {
+        this.setState({
+            phoneNum: e.target.value
+        });
+    }
+    onChangeInterestRange(e)
+    {
+        this.setState({
+            interestRange: e.target.value
+        });
+    }
+    onChangeMinCredScore(e)
+    {
+        this.setState({
+            minCredScore: e.target.value
+        });
+    }
+    onChangeMaxLTV(e)
+    {
+        this.setState({
+            maxLTV: e.target.value
+        });
+    }
+    onChangeMaxAmort(e)
+    {
+        this.setState({
+            maxAmort: e.target.value
+        });
+    }
+    onChangeMaxLoanAmt(e)
+    {
+        this.setState({
+            maxLoanAmt: e.target.value
+        });
+    }
+    onChangeNotes(e)
+    {
+        this.setState({
+            notes: e.target.value
+        });
+    }
     onSendEmails(e) {
         e.preventDefault();
         this.setState({
@@ -127,6 +223,82 @@ export default class DisplayData extends Component {
             showPhone:false
         });
     }
+    onHideEdit(e) {
+        e.preventDefault();
+        this.setState({
+            showEdit:false
+        });
+    }
+    onSendEdit(item) {
+        this.setState({
+            showEdit:true,
+            _id : item[12],
+            region: item[1],
+            lender: item[0],
+            email: item[2],
+            contact: item[3],
+            phoneNum: item[4],
+            interestRange: item[5],
+            minCredScore: item[6],
+            maxLTV: item[7],
+            maxAmort: item[8],
+            maxLoanAmt: item[9],
+            notes: item[10]
+        });
+
+    }
+    onDelete() {
+        axios.delete('http://localhost:5000/lenderData/delete/' + this.state._id)
+                .then(res => console.log(res.data));
+        this.setState({
+            showEdit:false,
+            region: "",
+            lender: '',
+            email: '',
+            contact: '',
+            phoneNum: '',
+            interestRange: '',
+            minCredScore: '',
+            maxLTV: '',
+            maxAmort: '',
+            maxLoanAmt: '',
+            notes: ''
+        });
+    }
+    onSubmit(e) {
+        e.preventDefault();
+        
+        const lenderData = {
+            region: this.state.region,
+            lender: this.state.lender,
+            email: this.state.email,
+            contact: this.state.contact,
+            phoneNum: this.state.phoneNum,
+            interestRange: this.state.interestRange,
+            minCredScore: this.state.minCredScore,
+            maxLTV: this.state.maxLTV,
+            maxAmort: this.state.maxAmort,
+            maxLoanAmt: this.state.maxLoanAmt,
+            notes: this.state.notes
+        }
+        axios.post('http://localhost:5000/lenderData/update/' + this.state._id, lenderData)
+                .then(res => console.log(res.data));
+        this.setState({
+            showEdit:false,
+            region: "",
+            lender: '',
+            email: '',
+            contact: '',
+            phoneNum: '',
+            interestRange: '',
+            minCredScore: '',
+            maxLTV: '',
+            maxAmort: '',
+            maxLoanAmt: '',
+            notes: ''
+        });
+      }
+        
     copyText(e) {
         e.preventDefault();
         //onClick={() => {navigator.clipboard.writeText(this.state.textToCopy)}}
@@ -249,7 +421,11 @@ export default class DisplayData extends Component {
                                             <td>
                                                     {item[10] === ""  ?  "None" : item[10]}
                                             </td>
-                                            {/* <td>{item[5]}</td> */}
+                                            <td>
+                                                <button  style = {{float:'left'}} onClick = {() => this.onSendEdit(item)} type="button" class="btn btn-secondary btn-lg btn-block"> Edit
+                                                </button>
+
+                                            </td>
                                             </tr> 
                                         ))}
                                     </tbody>
@@ -327,13 +503,100 @@ export default class DisplayData extends Component {
                         </Button>
                         </Modal.Footer>
                     </Modal>
+                    <Modal show={this.state.showEdit} onHide={this.state.showEdit}>
+                        <Modal.Header>
+                            <Button variant="danger"  onClick={this.onDelete} >
+                                Delete
+                            </Button>
+                            <Button variant="secondary" onClick={this.onHideEdit}>
+                                Close
+                            </Button>
+                           
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Row className="g-2">
+                                <Form style = {{textAlign: "left"}}>
+                                    <Col md>
+                                        <Form.Group className="mb-3" >
+                                            <Form.Label><strong>Lender</strong></Form.Label>
+                                            <Form.Control type="text" placeholder="Enter Lender" onChange={this.onChangeLender}  value={this.state.lender}/>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md>
+                                        <Form.Group className="mb-3" >
+                                            <Form.Label><strong>Region</strong></Form.Label>
+                                            <Form.Control type="text" placeholder="Enter Region" onChange={this.onChangeRegion}  value={this.state.region}/>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md>
+                                        <Form.Group className="mb-3" >
+                                            <Form.Label><strong>Email</strong></Form.Label>
+                                            <Form.Control type="text" placeholder="Enter Email" onChange={this.onChangeEmail}  value={this.state.email}/>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md>
+                                        <Form.Group className="mb-3" >
+                                            <Form.Label><strong>Contact</strong></Form.Label>
+                                            <Form.Control type="text" placeholder="Enter Contact" onChange={this.onChangeContact}  value={this.state.contact}/>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md>
+                                        <Form.Group className="mb-3" >
+                                            <Form.Label><strong>Phone Number</strong></Form.Label>
+                                            <Form.Control type="text" placeholder="Enter Phone Number" onChange={this.onChangePhoneNum}  value={this.state.phoneNum}/>
+                                        </Form.Group>
+                                    </Col>
+
+                                    <Col md>
+                                        <Form.Group className="mb-3" >
+                                            <Form.Label><strong>Interest Range</strong></Form.Label>
+                                            <Form.Control type="text" placeholder="Enter Interest Range" onChange={this.onChangeInterestRange}  value={this.state.interestRange}/>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md>
+                                        <Form.Group className="mb-3" >
+                                            <Form.Label><strong>Minimum Credit Score</strong></Form.Label>
+                                            <Form.Control type="text" placeholder="Enter Minimum Credit Score" onChange={this.onChangeMinCredScore}  value={this.state.minCredScore}/>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md>
+                                        <Form.Group className="mb-3" >
+                                            <Form.Label><strong>Max LTV</strong></Form.Label>
+                                            <Form.Control type="text" placeholder="Enter Max LTV" onChange={this.onChangeMaxLTV}  value={this.state.maxLTV}/>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md>
+                                        <Form.Group className="mb-3" >
+                                            <Form.Label><strong>Max Amortization (years)</strong></Form.Label>
+                                            <Form.Control type="text" placeholder="Enter Max Amortization" onChange={this.onChangeMaxAmort}  value={this.state.maxAmort}/>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md>
+                                        <Form.Group className="mb-3" >
+                                            <Form.Label><strong>Max Loan Amount</strong></Form.Label>
+                                            <Form.Control type="text" placeholder="Enter Max Loan Amount" onChange={this.onChangeMaxLoanAmt}  value={this.state.maxLoanAmt}/>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md>
+                                        <Form.Group className="mb-3" >
+                                            <Form.Label><strong>Notes</strong></Form.Label>
+                                            <Form.Control type="text" placeholder="Enter Notes" onChange={this.onChangeNotes}  value={this.state.notes}/>
+                                        </Form.Group>
+                                    </Col>
+                                </Form> 
+                            </Row>  
+                        </Modal.Body>
+                        <Modal.Footer>
+                        <Button variant="secondary" onClick={this.onHideEdit}>
+                            Close
+                        </Button>
+                        <Button variant="primary" onClick={this.onSubmit}>
+                            Submit
+                        </Button>
+                       
+                        </Modal.Footer>
+                    </Modal>
                 </div>
-                
-
-
-         
-
-
            );
         }
         else if(this.state.noData) {
@@ -348,23 +611,3 @@ export default class DisplayData extends Component {
         
     }
 }
-
-
-// <Col sm={2}>
-//                         <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa", 'borderStyle':'solid', }}>
-//                         <thead>
-//                                 <tr>
-//                                     <th style={{lineHeight:4, fontSize:18}} scope="col">Phone Number</th>
-//                                     {/* <th scope="col">Loan Types</th> */}
-//                                 </tr>
-//                             </thead>
-//                             <tbody>
-//                                 {
-//                                 this.state.data.map( item => (
-//                                     <tr>
-//                                         <td style={{lineHeight:3}}>{item[4] === ""  ?  "None" : item[4]}</td>
-//                                     </tr> 
-//                                 ))}
-//                             </tbody>
-//                         </table>
-//                     </Col>
