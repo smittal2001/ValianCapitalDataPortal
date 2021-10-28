@@ -39,8 +39,9 @@ export default class LandingPage extends Component {
                 loggedIn:true
             });
             window.open("/getLenderData");
-            var win = window.open("", "_self");
-            win.close();    
+            var win = window.open("/", "_self");
+            win.close(); 
+            
         }
         else {
             alert("Invalid Password Try again")
