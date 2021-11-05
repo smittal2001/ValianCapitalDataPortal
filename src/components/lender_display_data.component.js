@@ -26,12 +26,16 @@ export default class DisplayData extends Component {
         this.onChangeMaxLoanAmt = this.onChangeMaxLoanAmt.bind(this);
         this.onChangeMaxAmort = this.onChangeMaxAmort.bind(this);
         this.onChangeNotes = this.onChangeNotes.bind(this);
+        this.getData = this.getData.bind(this);
+        this.onSearchAgain = this.onSearchAgain.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
 
         this.state = {
             data: [[]],
             noData: false,
+            recieved: false,
+            updated: false,
             showEmails: false,
             showPhone: false,
             copyText: "",
@@ -53,16 +57,19 @@ export default class DisplayData extends Component {
        
     }
     componentDidMount() {
-        const loanTypesArr = this.props.loanTypes.split(" ")
+        console.log("test");
+        console.log(this.props.match.params.region);
+        console.log(this.props.match.params.loanTypes);
+        const loanTypesArr = this.props.match.params.loanTypes.split(" ")
         var loanTypes = "";
         for(var i =0; i<loanTypesArr.length-1; i++) {
             loanTypes += loanTypesArr[i] + "%20";
         }
         loanTypes += loanTypesArr[loanTypesArr.length-1];
-        console.log(this.props.loanTypes)
-        if(this.props.loanTypes==="") {
+        console.log(this.props.match.params.loanTypes)
+        if(this.props.match.params.loanTypes==="None") {
             
-            axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+this.props.region)
+            axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+this.props.match.params.region)
             .then(response => {
                 if(response.data.length > 0) {
                     this.setState({
@@ -84,7 +91,7 @@ export default class DisplayData extends Component {
                 console.log(error);
             })
         }
-        else if(this.props.region==="None"){
+        else if(this.props.match.params.region ==="None"){
            
             console.log(loanTypes)
             axios.get('https://val-cap-backend.herokuapp.com/lenderData/loanTypes/'+loanTypes)
@@ -110,8 +117,8 @@ export default class DisplayData extends Component {
             
         }
         else {
-            console.log('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.region)
-            axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.region)
+            console.log('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.match.params.region)
+            axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.match.params.region)
             .then(response => {
                 if(response.data.length > 0) {
                     this.setState({
@@ -229,6 +236,11 @@ export default class DisplayData extends Component {
             showEdit:false
         });
     }
+    onSearchAgain(e) {
+        e.preventDefault();
+        window.close();
+        // this.forceUpdate()
+    }    
     onSendEdit(item) {
         this.setState({
             showEdit:true,
@@ -247,9 +259,70 @@ export default class DisplayData extends Component {
         });
 
     }
+    getData() {
+        const loanTypesArr = this.props.match.params.loanTypes.split(" ")
+        var loanTypes = "";
+        for(var i =0; i<loanTypesArr.length-1; i++) {
+            loanTypes += loanTypesArr[i] + "%20";
+        }
+        loanTypes += loanTypesArr[loanTypesArr.length-1];
+        console.log(this.props.match.params.loanTypes)
+        if(this.props.match.params.loanTypes==="None") {
+            
+            axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+this.props.match.params.region)
+            .then(response => {
+                if(response.data.length > 0) {
+                    this.setState({
+                        recieved: true,
+                        data : response.data.map(item => [item.lender, item.region, item.email, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
+                    })
+                    console.log(this.state.data[0])
+                }
+                else {
+                    
+                    console.log("no data");
+                    this.setState({
+                        noData: true
+                    })
+                }
+                
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        }
+        else if(this.props.match.params.region==="None"){
+           
+            console.log(loanTypes)
+            axios.get('https://val-cap-backend.herokuapp.com/lenderData/loanTypes/'+loanTypes)
+            .then(response => {
+                if(response.data.length > 0) {
+                    this.setState({
+                        recieved: true,
+                        data : response.data.map(item => [item.lender, item.region, item.email, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
+                    })
+                    console.log(this.state.data[0])
+                }
+                else {
+                    console.log("no data");
+                    this.setState({
+                        noData: true
+                    })
+                }
+                
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        }
+            
+    }
     onDelete() {
         axios.delete('https://val-cap-backend.herokuapp.com/lenderData/delete/' + this.state._id)
-                .then(res => console.log(res.data));
+                .then(res => {
+                        console.log(res.data)
+                        this.setState({update:true});
+                    });
         this.setState({
             showEdit:false,
             region: "",
@@ -262,8 +335,10 @@ export default class DisplayData extends Component {
             maxLTV: '',
             maxAmort: '',
             maxLoanAmt: '',
-            notes: ''
+            notes: '',
+            recieved: false
         });
+        setTimeout(() => this.getData(), 1000);
     }
     onSubmit(e) {
         e.preventDefault();
@@ -295,8 +370,11 @@ export default class DisplayData extends Component {
             maxLTV: '',
             maxAmort: '',
             maxLoanAmt: '',
-            notes: ''
+            notes: '',
+            recieved: false
         });
+        setTimeout(() => this.getData(), 1000);
+        
       }
         
     copyText(e) {
@@ -324,287 +402,319 @@ export default class DisplayData extends Component {
         // var emails = this.state.data.map(item => item[2]);
         if(this.state.recieved) {
             return (
-               
-                <div style={{paddingLeft:25}} >
+                <div style = {{  padding: 100}}>
+                    <div style = {{ backgroundColor: 'white', borderRadius:10, padding: 25}}>
+                        <div style = {{textAlign:"left"}}>
+                            <strong>Search Results for:  </strong> 
+                            <br></br>
+                            Loan Types: <strong>{this.props.match.params.loanTypes.substring(0,this.props.match.params.loanTypes.length-1).replaceAll("-", ", ")} </strong>
+                            <br></br>
+                            Region: <strong>{this.props.match.params.region}</strong> 
+                        </div>
+                        <button style ={{}} onClick = {this.onSearchAgain} type="button" class="btn btn-secondary btn-lg btn-block">Search Again</button>
+
+                        <br></br>
+                        
+                        <div style={{paddingLeft:25}} >
                    
                     <button  style = {{float:'left'}} onClick = {this.copyText} type="button" class="btn btn-light btn-lg btn-block">Copy Selected</button>
                     <button  style = {{float:'right'}} onClick = {this.onSendEmails} type="button" class="btn btn-dark btn-lg btn-block">View Emails</button>   
                     <button  style = {{float:'right'}} onClick = {this.onSendPhone} type="button" class="btn btn-light btn-lg btn-block">View Phone Numbers</button>   
                     <br></br>
-                    <div style={{padding:50}} > 
-                        <Row>
-                            <Col sm={12}>
-                                <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa",  }} >
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Lender</th>
-                                            <th scope="col">Region</th>
-                                            <th scope='col'> Contact </th>
-                                            <th scope='col'> Email </th>
-                                            <th scope='col'> Phone Number </th>
-                                            <th scope="col"> Interest Range </th>
-                                            <th scope="col"> Minimum Credit Score </th>
-                                            <th scope="col">Max LTV</th>
-                                            <th scope='col'> Max Amortization (years)</th>
-                                            <th scope='col'> Max Loan Amount</th>
-                                            <th scope="col">Notes</th>
-                                            {/* <th scope="col">Loan Types</th> */}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {
-                                        this.state.data.map( item => (
-                                        <tr>
-                                            <td style = {{'width':'300px'}}>
-                                                    {item[0] === ""  ?  "None" : item[0]}
-                                            </td>
-                                            <td>
-                                                    {item[1] === ""  ?  "None" : item[1]}
-                                            </td>
-                                            <td>
-                                                    {item[3] === ""  ?  "None" : item[3]}
-                                            </td>
-                                            <td >
-                                                {item[2] === ""  ?  "None" : 
-                                                    <div>
-                                                        <input
-                                                            inline
-                                                            value = {item[2]}
-                                                            type="checkbox"
-                                                            defaultChecked={false}
-                                                            ref="complete"
-                                                            onChange={this.checkedBox}
-                                                        />
-                                                        <label style={{padding: 5}}>
-                                                            {item[2]}
-                                                        </label>
-                                                    </div>
-                                                }
-                                            </td>
-                                            <td style = {{'width':'300px'}}>
-                                                {item[4] === ""  ?  "None" : 
-                                                    <div>
-                                                        <input
-                                                            inline
-                                                            value = {item[4]}
-                                                            type="checkbox"
-                                                            defaultChecked={false}
-                                                            ref="complete"
-                                                            onChange={this.checkedBox}
-                                                        />
-                                                        <label style={{padding: 5}}>
-                                                            {item[4]}
-                                                        </label>
-                                                    </div>
-                                                }
-                                                
+                            <div style={{padding:50}} > 
+                                <Row>
+                                    <Col sm={12}>
+                                        <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa",  }} >
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Lender</th>
+                                                    <th scope="col">Region</th>
+                                                    <th scope='col'> Contact </th>
+                                                    <th scope='col'> Email </th>
+                                                    <th scope='col'> Phone Number </th>
+                                                    <th scope="col"> Interest Range </th>
+                                                    <th scope="col"> Minimum Credit Score </th>
+                                                    <th scope="col">Max LTV</th>
+                                                    <th scope='col'> Max Amortization (years)</th>
+                                                    <th scope='col'> Max Loan Amount</th>
+                                                    <th scope="col">Notes</th>
+                                                    {/* <th scope="col">Loan Types</th> */}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                this.state.data.map( item => (
+                                                <tr>
+                                                    <td style = {{'width':'300px'}}>
+                                                            {item[0] === ""  ?  "None" : item[0]}
+                                                    </td>
+                                                    <td>
+                                                            {item[1] === ""  ?  "None" : item[1]}
+                                                    </td>
+                                                    <td>
+                                                            {item[3] === ""  ?  "None" : item[3]}
+                                                    </td>
+                                                    <td >
+                                                        {item[2] === ""  ?  "None" : 
+                                                            <div>
+                                                                <input
+                                                                    inline
+                                                                    value = {item[2]}
+                                                                    type="checkbox"
+                                                                    defaultChecked={false}
+                                                                    ref="complete"
+                                                                    onChange={this.checkedBox}
+                                                                />
+                                                                <label style={{padding: 5}}>
+                                                                    {item[2]}
+                                                                </label>
+                                                            </div>
+                                                        }
+                                                    </td>
+                                                    <td style = {{'width':'300px'}}>
+                                                        {item[4] === ""  ?  "None" : 
+                                                            <div>
+                                                                <input
+                                                                    inline
+                                                                    value = {item[4]}
+                                                                    type="checkbox"
+                                                                    defaultChecked={false}
+                                                                    ref="complete"
+                                                                    onChange={this.checkedBox}
+                                                                />
+                                                                <label style={{padding: 5}}>
+                                                                    {item[4]}
+                                                                </label>
+                                                            </div>
+                                                        }
+                                                        
 
-                                            </td>
-                                            <td>
-                                                    {item[5] === ""  ?  "None" : item[5]}
-                                            </td>
-                                            <td>
-                                                    {item[6] === ""  ?  "None" : item[6]}
-                                               
-                                            </td>
-                                            <td>
-                                                    {item[7] === ""  ?  "None" : item[7]}
-                                               
-                                            </td>
-                                            <td>
-                                                    {item[8] === ""  ?  "None" : item[8]}
-                                               
-                                            </td>
-                                            <td>
-                                                    {item[9] === ""  ?  "None" : item[9]}
-                                            </td>
-                                            <td>
-                                                    {item[10] === ""  ?  "None" : item[10]}
-                                            </td>
-                                            <td>
-                                                <button  style = {{float:'left'}} onClick = {() => this.onSendEdit(item)} type="button" class="btn btn-secondary btn-lg btn-block"> Edit
-                                                </button>
+                                                    </td>
+                                                    <td>
+                                                            {item[5] === ""  ?  "None" : item[5]}
+                                                    </td>
+                                                    <td>
+                                                            {item[6] === ""  ?  "None" : item[6]}
+                                                    
+                                                    </td>
+                                                    <td>
+                                                            {item[7] === ""  ?  "None" : item[7]}
+                                                    
+                                                    </td>
+                                                    <td>
+                                                            {item[8] === ""  ?  "None" : item[8]}
+                                                    
+                                                    </td>
+                                                    <td>
+                                                            {item[9] === ""  ?  "None" : item[9]}
+                                                    </td>
+                                                    <td>
+                                                            {item[10] === ""  ?  "None" : item[10]}
+                                                    </td>
+                                                    <td>
+                                                        <button  style = {{float:'left'}} onClick = {() => this.onSendEdit(item)} type="button" class="btn btn-secondary btn-lg btn-block"> Edit
+                                                        </button>
 
-                                            </td>
-                                            </tr> 
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </Col>
-                        </Row>
+                                                    </td>
+                                                    </tr> 
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </Col>
+                                </Row>
+                            </div>
+                            <Modal show={this.state.showEmails} onHide={this.state.showEmails}>
+                                <Modal.Footer>
+                                <Button variant="secondary" onClick={this.onHideEmails}>
+                                    Close
+                                </Button>
+                                </Modal.Footer>
+                                <Modal.Body>
+                                    <div  style = {{display:'flex'}}>
+                                        <div  style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, margin:5, marginRight:5, width:"30%"}}>
+                                            <div style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, height:60 , padding:15}} > <strong>Lender</strong></div>
+                                            {
+                                            this.state.data.map( item => (
+                                                <div style = {{ height:60, margin:5, marginLeft:"5.5%"}}>
+                                                    {item[0] ==="" || item[0] === " "  ?  "None" : item[0]}
+                                                </div> 
+                                            ))}
+                                        </div>
+                                        
+                                        <div  style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, margin:5, marginRight:5, width:"70%"}}>
+                                        <div style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, height:60 , padding:15}} > <strong>Emails</strong></div>
+                                            {
+                                            this.state.data.map( item => (
+                                                <div style = {{ height:60, margin:5, marginLeft:"5.5%"}}>
+                                                    {item[2] ==="" || item[2] === " "  ?  "None" : item[2]}
+                                                </div> 
+                                            ))}
+                                        </div>
+                                    </div>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                <Button variant="secondary" onClick={this.onHideEmails}>
+                                    Close
+                                </Button>
+                                </Modal.Footer>
+                            </Modal>
+                            <Modal show={this.state.showPhone} onHide={this.state.showPhone}>
+                                <Modal.Footer>
+                                <Button variant="secondary" onClick={this.onHidePhone}>
+                                    Close
+                                </Button>
+                                </Modal.Footer>
+                                <Modal.Body>
+                                    <div  style = {{display:'flex'}}>
+                                        <div  style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, margin:5, marginRight:5, width:"30%"}}>
+                                            <div style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, height:60 , padding:15}} > <strong>Lender</strong></div>
+                                            {
+                                            this.state.data.map( item => (
+                                                <div style = {{ height:60, margin:5, marginLeft:"5.5%"}}>
+                                                    {item[0] ==="" || item[0] === " "  ?  "None" : item[0]}
+                                                </div> 
+                                            ))}
+                                        </div>
+                                        
+                                        <div  style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, margin:5, marginRight:5, width:"70%"}}>
+                                        <div style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, height:60 , padding:15}} > <strong>Phone Numbers</strong></div>
+                                            {
+                                            this.state.data.map( item => (
+                                                <div style = {{ height:60, margin:5, marginLeft:"5.5%"}}>
+                                                    {item[4] ==="" || item[4] === " "  ?  "None" : item[4]}
+                                                </div> 
+                                            ))}
+                                        </div>
+                                    </div>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                <Button variant="secondary" onClick={this.onHidePhone}>
+                                    Close
+                                </Button>
+                                </Modal.Footer>
+                            </Modal>
+                            <Modal show={this.state.showEdit} onHide={this.state.showEdit}>
+                                <Modal.Header>
+                                    <Button variant="danger"  onClick={this.onDelete} >
+                                        Delete
+                                    </Button>
+                                    <Button variant="secondary" onClick={this.onHideEdit}>
+                                        Close
+                                    </Button>
+                                
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <Row className="g-2">
+                                        <Form style = {{textAlign: "left"}}>
+                                            <Col md>
+                                                <Form.Group className="mb-3" >
+                                                    <Form.Label><strong>Lender</strong></Form.Label>
+                                                    <Form.Control type="text" placeholder="Enter Lender" onChange={this.onChangeLender}  value={this.state.lender}/>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md>
+                                                <Form.Group className="mb-3" >
+                                                    <Form.Label><strong>Region</strong></Form.Label>
+                                                    <Form.Control type="text" placeholder="Enter Region" onChange={this.onChangeRegion}  value={this.state.region}/>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md>
+                                                <Form.Group className="mb-3" >
+                                                    <Form.Label><strong>Email</strong></Form.Label>
+                                                    <Form.Control type="text" placeholder="Enter Email" onChange={this.onChangeEmail}  value={this.state.email}/>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md>
+                                                <Form.Group className="mb-3" >
+                                                    <Form.Label><strong>Contact</strong></Form.Label>
+                                                    <Form.Control type="text" placeholder="Enter Contact" onChange={this.onChangeContact}  value={this.state.contact}/>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md>
+                                                <Form.Group className="mb-3" >
+                                                    <Form.Label><strong>Phone Number</strong></Form.Label>
+                                                    <Form.Control type="text" placeholder="Enter Phone Number" onChange={this.onChangePhoneNum}  value={this.state.phoneNum}/>
+                                                </Form.Group>
+                                            </Col>
+
+                                            <Col md>
+                                                <Form.Group className="mb-3" >
+                                                    <Form.Label><strong>Interest Range</strong></Form.Label>
+                                                    <Form.Control type="text" placeholder="Enter Interest Range" onChange={this.onChangeInterestRange}  value={this.state.interestRange}/>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md>
+                                                <Form.Group className="mb-3" >
+                                                    <Form.Label><strong>Minimum Credit Score</strong></Form.Label>
+                                                    <Form.Control type="text" placeholder="Enter Minimum Credit Score" onChange={this.onChangeMinCredScore}  value={this.state.minCredScore}/>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md>
+                                                <Form.Group className="mb-3" >
+                                                    <Form.Label><strong>Max LTV</strong></Form.Label>
+                                                    <Form.Control type="text" placeholder="Enter Max LTV" onChange={this.onChangeMaxLTV}  value={this.state.maxLTV}/>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md>
+                                                <Form.Group className="mb-3" >
+                                                    <Form.Label><strong>Max Amortization (years)</strong></Form.Label>
+                                                    <Form.Control type="text" placeholder="Enter Max Amortization" onChange={this.onChangeMaxAmort}  value={this.state.maxAmort}/>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md>
+                                                <Form.Group className="mb-3" >
+                                                    <Form.Label><strong>Max Loan Amount</strong></Form.Label>
+                                                    <Form.Control type="text" placeholder="Enter Max Loan Amount" onChange={this.onChangeMaxLoanAmt}  value={this.state.maxLoanAmt}/>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md>
+                                                <Form.Group className="mb-3" >
+                                                    <Form.Label><strong>Notes</strong></Form.Label>
+                                                    <Form.Control type="text" placeholder="Enter Notes" onChange={this.onChangeNotes}  value={this.state.notes}/>
+                                                </Form.Group>
+                                            </Col>
+                                        </Form> 
+                                    </Row>  
+                                </Modal.Body>
+                                <Modal.Footer>
+                                <Button variant="secondary" onClick={this.onHideEdit}>
+                                    Close
+                                </Button>
+                                <Button variant="primary" onClick={this.onSubmit}>
+                                    Submit
+                                </Button>
+                            
+                                </Modal.Footer>
+                            </Modal>
+                        </div>
+
+                        {/* <button onClick = {this.onSubmit} type="button" class="btn btn-light btn-lg">Search Again</button> */}
                     </div>
-                    <Modal show={this.state.showEmails} onHide={this.state.showEmails}>
-                        <Modal.Footer>
-                        <Button variant="secondary" onClick={this.onHideEmails}>
-                            Close
-                        </Button>
-                        </Modal.Footer>
-                        <Modal.Body>
-                            <div  style = {{display:'flex'}}>
-                                <div  style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, margin:5, marginRight:5, width:"30%"}}>
-                                    <div style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, height:60 , padding:15}} > <strong>Lender</strong></div>
-                                    {
-                                    this.state.data.map( item => (
-                                        <div style = {{ height:60, margin:5, marginLeft:"5.5%"}}>
-                                            {item[0] ==="" || item[0] === " "  ?  "None" : item[0]}
-                                        </div> 
-                                    ))}
-                                </div>
-                                
-                                <div  style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, margin:5, marginRight:5, width:"70%"}}>
-                                <div style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, height:60 , padding:15}} > <strong>Emails</strong></div>
-                                    {
-                                    this.state.data.map( item => (
-                                        <div style = {{ height:60, margin:5, marginLeft:"5.5%"}}>
-                                            {item[2] ==="" || item[2] === " "  ?  "None" : item[2]}
-                                        </div> 
-                                    ))}
-                                </div>
-                            </div>
-                        </Modal.Body>
-                        <Modal.Footer>
-                        <Button variant="secondary" onClick={this.onHideEmails}>
-                            Close
-                        </Button>
-                        </Modal.Footer>
-                    </Modal>
-                    <Modal show={this.state.showPhone} onHide={this.state.showPhone}>
-                        <Modal.Footer>
-                        <Button variant="secondary" onClick={this.onHidePhone}>
-                            Close
-                        </Button>
-                        </Modal.Footer>
-                        <Modal.Body>
-                            <div  style = {{display:'flex'}}>
-                                <div  style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, margin:5, marginRight:5, width:"30%"}}>
-                                    <div style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, height:60 , padding:15}} > <strong>Lender</strong></div>
-                                    {
-                                    this.state.data.map( item => (
-                                        <div style = {{ height:60, margin:5, marginLeft:"5.5%"}}>
-                                            {item[0] ==="" || item[0] === " "  ?  "None" : item[0]}
-                                        </div> 
-                                    ))}
-                                </div>
-                                
-                                <div  style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, margin:5, marginRight:5, width:"70%"}}>
-                                <div style = {{borderStyle: 'solid', textAlign: "center", borderWidth: 1, height:60 , padding:15}} > <strong>Phone Numbers</strong></div>
-                                    {
-                                    this.state.data.map( item => (
-                                        <div style = {{ height:60, margin:5, marginLeft:"5.5%"}}>
-                                            {item[4] ==="" || item[4] === " "  ?  "None" : item[4]}
-                                        </div> 
-                                    ))}
-                                </div>
-                            </div>
-                        </Modal.Body>
-                        <Modal.Footer>
-                        <Button variant="secondary" onClick={this.onHidePhone}>
-                            Close
-                        </Button>
-                        </Modal.Footer>
-                    </Modal>
-                    <Modal show={this.state.showEdit} onHide={this.state.showEdit}>
-                        <Modal.Header>
-                            <Button variant="danger"  onClick={this.onDelete} >
-                                Delete
-                            </Button>
-                            <Button variant="secondary" onClick={this.onHideEdit}>
-                                Close
-                            </Button>
-                           
-                        </Modal.Header>
-                        <Modal.Body>
-                            <Row className="g-2">
-                                <Form style = {{textAlign: "left"}}>
-                                    <Col md>
-                                        <Form.Group className="mb-3" >
-                                            <Form.Label><strong>Lender</strong></Form.Label>
-                                            <Form.Control type="text" placeholder="Enter Lender" onChange={this.onChangeLender}  value={this.state.lender}/>
-                                        </Form.Group>
-                                    </Col>
-                                    <Col md>
-                                        <Form.Group className="mb-3" >
-                                            <Form.Label><strong>Region</strong></Form.Label>
-                                            <Form.Control type="text" placeholder="Enter Region" onChange={this.onChangeRegion}  value={this.state.region}/>
-                                        </Form.Group>
-                                    </Col>
-                                    <Col md>
-                                        <Form.Group className="mb-3" >
-                                            <Form.Label><strong>Email</strong></Form.Label>
-                                            <Form.Control type="text" placeholder="Enter Email" onChange={this.onChangeEmail}  value={this.state.email}/>
-                                        </Form.Group>
-                                    </Col>
-                                    <Col md>
-                                        <Form.Group className="mb-3" >
-                                            <Form.Label><strong>Contact</strong></Form.Label>
-                                            <Form.Control type="text" placeholder="Enter Contact" onChange={this.onChangeContact}  value={this.state.contact}/>
-                                        </Form.Group>
-                                    </Col>
-                                    <Col md>
-                                        <Form.Group className="mb-3" >
-                                            <Form.Label><strong>Phone Number</strong></Form.Label>
-                                            <Form.Control type="text" placeholder="Enter Phone Number" onChange={this.onChangePhoneNum}  value={this.state.phoneNum}/>
-                                        </Form.Group>
-                                    </Col>
-
-                                    <Col md>
-                                        <Form.Group className="mb-3" >
-                                            <Form.Label><strong>Interest Range</strong></Form.Label>
-                                            <Form.Control type="text" placeholder="Enter Interest Range" onChange={this.onChangeInterestRange}  value={this.state.interestRange}/>
-                                        </Form.Group>
-                                    </Col>
-                                    <Col md>
-                                        <Form.Group className="mb-3" >
-                                            <Form.Label><strong>Minimum Credit Score</strong></Form.Label>
-                                            <Form.Control type="text" placeholder="Enter Minimum Credit Score" onChange={this.onChangeMinCredScore}  value={this.state.minCredScore}/>
-                                        </Form.Group>
-                                    </Col>
-                                    <Col md>
-                                        <Form.Group className="mb-3" >
-                                            <Form.Label><strong>Max LTV</strong></Form.Label>
-                                            <Form.Control type="text" placeholder="Enter Max LTV" onChange={this.onChangeMaxLTV}  value={this.state.maxLTV}/>
-                                        </Form.Group>
-                                    </Col>
-                                    <Col md>
-                                        <Form.Group className="mb-3" >
-                                            <Form.Label><strong>Max Amortization (years)</strong></Form.Label>
-                                            <Form.Control type="text" placeholder="Enter Max Amortization" onChange={this.onChangeMaxAmort}  value={this.state.maxAmort}/>
-                                        </Form.Group>
-                                    </Col>
-                                    <Col md>
-                                        <Form.Group className="mb-3" >
-                                            <Form.Label><strong>Max Loan Amount</strong></Form.Label>
-                                            <Form.Control type="text" placeholder="Enter Max Loan Amount" onChange={this.onChangeMaxLoanAmt}  value={this.state.maxLoanAmt}/>
-                                        </Form.Group>
-                                    </Col>
-                                    <Col md>
-                                        <Form.Group className="mb-3" >
-                                            <Form.Label><strong>Notes</strong></Form.Label>
-                                            <Form.Control type="text" placeholder="Enter Notes" onChange={this.onChangeNotes}  value={this.state.notes}/>
-                                        </Form.Group>
-                                    </Col>
-                                </Form> 
-                            </Row>  
-                        </Modal.Body>
-                        <Modal.Footer>
-                        <Button variant="secondary" onClick={this.onHideEdit}>
-                            Close
-                        </Button>
-                        <Button variant="primary" onClick={this.onSubmit}>
-                            Submit
-                        </Button>
-                       
-                        </Modal.Footer>
-                    </Modal>
-                </div>
+                  </div>
+               
+                
            );
         }
         else if(this.state.noData) {
-            return <h1>No Search Results </h1>
+            <div style = {{  padding: 100}}>
+                    <div style = {{ backgroundColor: 'white', borderRadius:10, padding: 25}}>
+                        <div style = {{textAlign:"center"}}>
+                            <h1>No Search Results</h1>
+                        </div>
+                    </div>
+                </div>
         }
         else
         {
-            return <h1> Loading... </h1>
+            return (
+                <div style = {{  padding: 100}}>
+                    <div style = {{ backgroundColor: 'white', borderRadius:10, padding: 25}}>
+                        <div style = {{textAlign:"center"}}>
+                            <h1>Loading...</h1>
+                        </div>
+                    </div>
+                </div>
+            );
         }
           
             
