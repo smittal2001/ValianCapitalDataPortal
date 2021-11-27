@@ -32,7 +32,7 @@ export default class DisplayData extends Component {
         this.getData = this.getData.bind(this);
         this.onSearchAgain = this.onSearchAgain.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-
+        this.onChangeLoanType = this.onChangeLoanType.bind(this);
 
         this.state = {
             data: [[]],
@@ -54,12 +54,28 @@ export default class DisplayData extends Component {
             maxLTV: '',
             maxAmort: '',
             maxLoanAmt: '',
-            notes: ''
+            notes: '',
+            itemLoanTypes: [], 
+            displayLoanTypes: [],
+            loanTypes: [],
+            loanTypeList: ''
             
         }
        
     }
     componentDidMount() {
+        axios.get('https://val-cap-backend.herokuapp.com/loanTypes/distinctLoanTypes')
+        .then(response => {
+            if(response.data.length > 0) {
+                this.setState({
+                    loanTypes : response.data
+                })
+            }  
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+
         console.log("test");
         console.log(this.props.match.params.region);
         console.log(this.props.match.params.loanTypes);
@@ -236,7 +252,8 @@ export default class DisplayData extends Component {
     onHideEdit(e) {
         e.preventDefault();
         this.setState({
-            showEdit:false
+            showEdit:false,
+            loanTypeList: ''
         });
     }
     onSearchAgain(e) {
@@ -245,6 +262,17 @@ export default class DisplayData extends Component {
         // this.forceUpdate()
     }    
     onSendEdit(item) {
+        
+        var loanTypes = item[11];
+        const other = this.state.loanTypes;
+        loanTypes.forEach(element => {
+            this.state.loanTypeList += element + '-';
+            var index = other.indexOf(element);
+            if (index !== -1) {
+                other.splice(index, 1);
+            }
+        });
+        console.log(item[11]);
         this.setState({
             showEdit:true,
             _id : item[12],
@@ -258,8 +286,11 @@ export default class DisplayData extends Component {
             maxLTV: item[7],
             maxAmort: item[8],
             maxLoanAmt: item[9],
-            notes: item[10]
+            notes: item[10],
+            itemLoanTypes: item[11],
+            displayLoanTypes: other
         });
+
 
     }
     getData() {
@@ -365,9 +396,34 @@ export default class DisplayData extends Component {
         });
         setTimeout(() => this.getData(), 1000);
     }
+    onChangeLoanType(e){
+        if(e.target.checked) {
+            this.state.loanTypeList += e.target.value + '-';
+        }
+        else {
+            var length = e.target.value.length;
+            var index = this.state.loanTypeList.indexOf(e.target.value)
+            if(index != -1){
+                this.state.loanTypeList = this.state.loanTypeList.substring(0,index) + this.state.loanTypeList.substring(index+length+1);
+                console.log("removed " + index + " " + this.state.loanTypeList.substring(0,index))
+            }
+        }
+        console.log(this.state.loanTypeList)
+    }
     onSubmit(e) {
         e.preventDefault();
+        const selectedLoans = this.state.loanTypeList.split("-");
+        selectedLoans.splice(-1);
+        console.log(selectedLoans);
+        selectedLoans.forEach((item) => {
+            if(item === "") {
+                console.log(item);
+                var index = selectedLoans.indexOf(item);
+                selectedLoans.splice(index, 1);
+            }
+        })
         
+        console.log(selectedLoans)
         const lenderData = {
             region: this.state.region,
             lender: this.state.lender,
@@ -379,7 +435,8 @@ export default class DisplayData extends Component {
             maxLTV: this.state.maxLTV,
             maxAmort: this.state.maxAmort,
             maxLoanAmt: this.state.maxLoanAmt,
-            notes: this.state.notes
+            notes: this.state.notes,
+            loanTypes: selectedLoans
         }
         axios.post('https://val-cap-backend.herokuapp.com/lenderData/update/' + this.state._id, lenderData)
                 .then(res => console.log(res.data));
@@ -396,6 +453,9 @@ export default class DisplayData extends Component {
             maxAmort: '',
             maxLoanAmt: '',
             notes: '',
+            itemLoanTypes: [], 
+            displayLoanTypes: [],
+            loanTypeList: '',
             recieved: false
         });
         setTimeout(() => this.getData(), 1000);
@@ -698,6 +758,52 @@ export default class DisplayData extends Component {
                                                     <Form.Label><strong>Notes</strong></Form.Label>
                                                     <Form.Control type="text" placeholder="Enter Notes" onChange={this.onChangeNotes}  value={this.state.notes}/>
                                                 </Form.Group>
+                                            </Col>
+                                            <Col md>
+                                                <strong> Loan Types </strong>
+                                                <Row xs={3}>
+                                                    {this.state.itemLoanTypes.map((type) => (
+                                                        <div key={type} className="mb-3" >
+                                                        
+                                                                <Col>
+                                                                <input
+                                                                    inline
+                                                                    value = {type}
+                                                                    type="checkbox"
+                                                                    defaultChecked={true}
+                                                                    ref="complete"
+                                                                    onChange={this.onChangeLoanType}
+                                                                    
+                                                                />
+                                                                <label style={{padding: 5}}>
+                                                                {type}
+                                                                </label>
+                                                                </Col>
+                                                            
+                                                        </div>
+                                                    ))}
+                                                    {this.state.displayLoanTypes.map( (loanType) => (
+                                                        <div key={loanType} className="mb-3" >
+                                                        
+                                                            <Col>
+                                                            <input
+                                                                inline
+                                                                value = {loanType}
+                                                                type="checkbox"
+                                                                defaultChecked={false}
+                                                                ref="complete"
+                                                                onChange={this.onChangeLoanType}
+                                                                
+                                                            />
+                                                            <label style={{padding: 5}}>
+                                                            {loanType}
+                                                            </label>
+                                                            </Col>
+                                                    
+                                                        </div>
+                                                    ))}
+                                                    
+                                                </Row>
                                             </Col>
                                         </Form> 
                                     </Row>  

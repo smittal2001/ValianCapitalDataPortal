@@ -80,6 +80,8 @@ router.route('/update/:id').post((req, res) => {
   updateFields.push(["minCreditScore", req.body.minCreditScore]);
   updateFields.push(["maxAmortization",req.body.maxAmort]);
   updateFields.push(["maxLoanAmount", req.body.maxLoanAmt]);
+  updateFields.push(["loanType", req.body.loanTypes]);
+
   console.log(updateFields);
 
 
