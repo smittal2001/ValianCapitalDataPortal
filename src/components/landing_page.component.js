@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Redirect } from "react-router-dom";
 
 export default class LandingPage extends Component {
     constructor(props) {
@@ -38,10 +39,6 @@ export default class LandingPage extends Component {
             this.setState({
                 loggedIn:true
             });
-            window.open("/getLenderData");
-            var win = window.open("/", "_self");
-            win.close(); 
-            
         }
         else {
             alert("Invalid Password Try again")
@@ -52,25 +49,30 @@ export default class LandingPage extends Component {
     }
 
     render() {
-        return (
-            <div className= "container" style={{padding:80}}>
-                <h1 style = {{color:"white"}}>Welcome to the Lender Info Data Portal</h1>
-                <div style={{width:"50%", padding:50, margin: "0 auto", backgroundColor: "white", transform: "translateY(40%)", borderRadius:10}}>
-                    <form onSubmit = {this.onLogIn}>
-                        <label  style= {{padding: 10}}>Password:</label>
-                        <input
-                            inline
-                            value = {this.state.password}
-                            type="password"
-                            onChange={this.onChangePassword}
-                        />
-                        <br></br>
-                        <input type="submit" value="Log In" className="btn btn-primary" />
-                    </form>
+        if(this.state.loggedIn){
+            return ( <Redirect to="/queryData" />);
+        }
+        else {
+            return (
+                <div className= "container" style={{padding:80}}>
+                    <h1 style = {{color:"white"}}>Welcome to the Lender Info Data Portal</h1>
+                    <div style={{width:"50%", padding:50, margin: "0 auto", backgroundColor: "white", transform: "translateY(40%)", borderRadius:10}}>
+                        <form onSubmit = {this.onLogIn}>
+                            <label  style= {{padding: 10}}>Password:</label>
+                            <input
+                                inline
+                                value = {this.state.password}
+                                type="password"
+                                onChange={this.onChangePassword}
+                            />
+                            <br></br>
+                            <input type="submit" value="Log In" className="btn btn-primary" />
+                        </form>
+                    </div>
                 </div>
-            </div>
-        );
-        
+            );
+        }
+
             
         }
 }

@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import { Modal, Row, Col, Button, Form} from "react-bootstrap";
+import {Link} from 'react-router-dom'
+import {Helmet} from 'react-helmet';
+
 
 
 export default class DisplayData extends Component {
@@ -67,7 +70,7 @@ export default class DisplayData extends Component {
         }
         loanTypes += loanTypesArr[loanTypesArr.length-1];
         console.log(this.props.match.params.loanTypes)
-        if(this.props.match.params.loanTypes==="None") {
+        if(this.props.match.params.loanTypes==="None-") {
             
             axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+this.props.match.params.region)
             .then(response => {
@@ -267,7 +270,7 @@ export default class DisplayData extends Component {
         }
         loanTypes += loanTypesArr[loanTypesArr.length-1];
         console.log(this.props.match.params.loanTypes)
-        if(this.props.match.params.loanTypes==="None") {
+        if(this.props.match.params.loanTypes==="None-") {
             
             axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+this.props.match.params.region)
             .then(response => {
@@ -302,6 +305,28 @@ export default class DisplayData extends Component {
                         data : response.data.map(item => [item.lender, item.region, item.email, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
                     })
                     console.log(this.state.data[0])
+                }
+                else {
+                    console.log("no data");
+                    this.setState({
+                        noData: true
+                    })
+                }
+                
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        } else {
+            console.log(loanTypes)
+            axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.match.params.region)
+            .then(response => {
+                if(response.data.length > 0) {
+                    this.setState({
+                        recieved: true,
+                        data : response.data.map(item => [item.lender, item.region, item.email, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
+                    })
+                    console.log("data")
                 }
                 else {
                     console.log("no data");
@@ -377,17 +402,16 @@ export default class DisplayData extends Component {
         
       }
         
-    copyText(e) {
-        e.preventDefault();
-        //onClick={() => {navigator.clipboard.writeText(this.state.textToCopy)}}
-
-        navigator.clipboard.writeText(this.state.copyText)
-        alert("Copied text:\n" + this.state.copyText)
+    copyText() {
+        navigator.clipboard.writeText(this.state.copyText).then( () => {
+            alert("Copied text:\n" + this.state.copyText)
+        });
+       
         
     }
     checkedBox(e){
         if(e.target.checked) {
-            this.state.copyText += e.target.value + "\n";
+            this.state.copyText += e.target.value + " ";
         }
         else {
             var length = e.target.value.length;
@@ -402,8 +426,12 @@ export default class DisplayData extends Component {
         // var emails = this.state.data.map(item => item[2]);
         if(this.state.recieved) {
             return (
-                <div style = {{  padding: 100}}>
-                    <div style = {{ backgroundColor: 'white', borderRadius:10, padding: 25}}>
+              
+                    <div style = {{  padding: 50}}>
+                          <Helmet>
+                            <style>{'body { background-color: #F8F0E3; }'}</style>
+                         </Helmet>
+                    <div  >
                         <div style = {{textAlign:"left"}}>
                             <strong>Search Results for:  </strong> 
                             <br></br>
@@ -411,20 +439,18 @@ export default class DisplayData extends Component {
                             <br></br>
                             Region: <strong>{this.props.match.params.region}</strong> 
                         </div>
-                        <button style ={{}} onClick = {this.onSearchAgain} type="button" class="btn btn-secondary btn-lg btn-block">Search Again</button>
-
-                        <br></br>
+                        <Link to="/queryData" className="btn btn-secondary btn-lg btn-block" role="button"> Search Again</Link>
                         
-                        <div style={{paddingLeft:25}} >
-                   
-                    <button  style = {{float:'left'}} onClick = {this.copyText} type="button" class="btn btn-light btn-lg btn-block">Copy Selected</button>
-                    <button  style = {{float:'right'}} onClick = {this.onSendEmails} type="button" class="btn btn-dark btn-lg btn-block">View Emails</button>   
-                    <button  style = {{float:'right'}} onClick = {this.onSendPhone} type="button" class="btn btn-light btn-lg btn-block">View Phone Numbers</button>   
-                    <br></br>
-                            <div style={{padding:50}} > 
-                                <Row>
+                        {/* <Container > */}
+                           
+                            <button  style = {{float:'left'}} onClick= {this.copyText} type="button" class="btn btn-light btn-lg btn-block">Copy Selected</button>
+                            <button  style = {{float:'right'}} onClick = {this.onSendEmails} type="button" class="btn btn-dark btn-lg btn-block">View Emails</button>   
+                            <button  style = {{float:'right'}} onClick = {this.onSendPhone} type="button" class="btn btn-light btn-lg btn-block">View Phone Numbers</button>   
+                            <br></br>
+                            <div style={{paddingTop:50}} > 
+                                <Row >
                                     <Col sm={12}>
-                                        <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa",  }} >
+                                        <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa", }} >
                                             <thead>
                                                 <tr>
                                                     <th scope="col">Lender</th>
@@ -445,7 +471,7 @@ export default class DisplayData extends Component {
                                                 {
                                                 this.state.data.map( item => (
                                                 <tr>
-                                                    <td style = {{'width':'300px'}}>
+                                                    <td style = {{'width':'100px'}}>
                                                             {item[0] === ""  ?  "None" : item[0]}
                                                     </td>
                                                     <td>
@@ -471,7 +497,7 @@ export default class DisplayData extends Component {
                                                             </div>
                                                         }
                                                     </td>
-                                                    <td style = {{'width':'300px'}}>
+                                                    <td style = {{'width':'100px'}}>
                                                         {item[4] === ""  ?  "None" : 
                                                             <div>
                                                                 <input
@@ -686,23 +712,27 @@ export default class DisplayData extends Component {
                             
                                 </Modal.Footer>
                             </Modal>
-                        </div>
-
+                        {/* </Container> */}
+                    
                         {/* <button onClick = {this.onSubmit} type="button" class="btn btn-light btn-lg">Search Again</button> */}
                     </div>
                   </div>
+                
                
                 
            );
         }
         else if(this.state.noData) {
-            <div style = {{  padding: 100}}>
-                    <div style = {{ backgroundColor: 'white', borderRadius:10, padding: 25}}>
-                        <div style = {{textAlign:"center"}}>
-                            <h1>No Search Results</h1>
-                        </div>
+            return( <div style = {{  padding: 100}}>
+                <div style = {{ backgroundColor: 'white', borderRadius:10, padding: 25}}>
+                    <Link to="/queryData" className="btn btn-secondary btn-lg btn-block" role="button"> Search Again</Link>
+                    <div style = {{textAlign:"center", padding: 50}}>
+                        <h1>No Search Results</h1>
                     </div>
                 </div>
+            </div>
+            );
+           
         }
         else
         {

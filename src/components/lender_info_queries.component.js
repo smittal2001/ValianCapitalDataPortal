@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Col, Form, Row } from "react-bootstrap";
 import axios from 'axios';
-import DisplayData from "./lender_display_data.component";
+import { Redirect } from "react-router-dom";
 import {Link} from 'react-router-dom';
 
 export default class LenderInfoData extends Component {
@@ -113,17 +113,13 @@ export default class LenderInfoData extends Component {
         e.preventDefault();
         console.log(this.state.loanTypeList)
         if(this.state.loanTypeList === '') {
-            window.open("/display/"+this.state.region+"/None");
+            this.setState({
+                loanTypeList: "None-"
+            })
         } 
-        else {
-            window.open("/display/"+this.state.region+"/"+this.state.loanTypeList);
-        }
-        
+
         this.setState({
-            recieved: false,
-            lender: '',
-            region: 'None',
-            loanTypeList: '',
+            recieved: true,
         });
     }
     onSearchAgain(e) {
@@ -154,24 +150,9 @@ export default class LenderInfoData extends Component {
     }
 
     render() {
-    if(!this.state.loggedIn) {
+    if(this.state.recieved) {
        return (  
-            <div className= "container" style={{padding:80}}>
-                <h1 style = {{color:"white"}}>Welcome to the Lender Info Data Portal</h1>
-                <div style={{width:"50%", padding:50, margin: "0 auto", backgroundColor: "white", transform: "translateY(40%)", borderRadius:10}}>
-                    <form onSubmit = {this.onLogIn}>
-                        <label  style= {{padding: 10}}>Password:</label>
-                        <input
-                            inline
-                            value = {this.state.password}
-                            type="password"
-                            onChange={this.onChangePassword}
-                        />
-                        <br></br>
-                        <input type="submit" value="Log In" className="btn btn-primary" />
-                    </form>
-                </div>
-            </div>
+        <Redirect to= { "/display/" + this.state.region + "/" + this.state.loanTypeList } />
        )    
     }
     else {
