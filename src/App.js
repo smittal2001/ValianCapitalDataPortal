@@ -8,6 +8,7 @@ import AddLenderData from "./components/add_lender_data.component"
 import LenderInfoData from './components/lender_info_queries.component'
 import DisplayData from './components/lender_display_data.component'
 import LandingPage from './components/landing_page.component';
+// import ReadFile from './components/read_file.component';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path = "/queryData" component={LenderInfoData} />
         <Route path = "/display/:region/:loanTypes"  component={DisplayData} />
         <Route path = "/addLenderData" component = {AddLenderData} />
+        {/* <Route path = "/readfile" component = {ReadFile} /> */}
      </Router>
     </div>
   );
