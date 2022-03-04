@@ -24,6 +24,23 @@ router.route('/add').post((req, res) => {
     .catch(err => res.status(400).json(`Error: ${err} Lender Data ${newLender}`));
 });
 
+router.route('/getAll').get((req, res) => {
+  LenderInfo.find()
+    .then(items => {
+      res.json(items)
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/getLenderName/:lender').get((req, res) => {
+  var name = req.params.lender
+  LenderInfo.find({lender: new RegExp(name, 'i') })
+    .then(items => {
+      res.json(items)
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
 router.route('/get/:loanTypes/:region').get((req, res) => {
   const loanTypes = req.params.loanTypes.substring(0,req.params.loanTypes.length-1).split("-");
 

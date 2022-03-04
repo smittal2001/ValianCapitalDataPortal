@@ -76,7 +76,6 @@ export default class DisplayData extends Component {
             console.log(error);
         })
 
-        console.log("test");
         console.log(this.props.match.params.region);
         console.log(this.props.match.params.loanTypes);
         const loanTypesArr = this.props.match.params.loanTypes.split(" ")
@@ -86,7 +85,27 @@ export default class DisplayData extends Component {
         }
         loanTypes += loanTypesArr[loanTypesArr.length-1];
         console.log(this.props.match.params.loanTypes)
-        if(this.props.match.params.loanTypes==="None-") {
+        if(this.props.match.params.lender === "View" && this.props.match.params.region==="All" && this.props.match.params.loanTypes==="Data") {
+            axios.get('https://val-cap-backend.herokuapp.com/lenderData/getAll')
+            .then(response =>  {
+                this.setState({
+                    recieved: true,
+                    data: response.data.map(item => [item.lender, item.region, item.email, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
+                })
+            })
+        }
+        else if(this.props.match.params.lender != "None") {
+            axios.get('https://val-cap-backend.herokuapp.com/lenderData/getLenderName/'+this.props.match.params.lender)
+            .then(response =>  {
+                this.setState({
+                    recieved: true,
+                    data: response.data.map(item => [item.lender, item.region, item.email, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
+                })
+            })
+            console.log("lender...")
+            console.log(this.state.data)
+        }
+        else if(this.props.match.params.loanTypes==="None-") {
             
             axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+this.props.match.params.region)
             .then(response => {
@@ -300,8 +319,28 @@ export default class DisplayData extends Component {
             loanTypes += loanTypesArr[i] + "%20";
         }
         loanTypes += loanTypesArr[loanTypesArr.length-1];
-        console.log(this.props.match.params.loanTypes)
-        if(this.props.match.params.loanTypes==="None-") {
+        console.log(this.props.match.params.lender)
+        if(this.props.match.params.lender === "View" && this.props.match.params.region==="All" && this.props.match.params.loanTypes==="Data") {
+            axios.get('https://val-cap-backend.herokuapp.com/lenderData/getAll')
+            .then(response =>  {
+                this.setState({
+                    recieved: true,
+                    data: response.data.map(item => [item.lender, item.region, item.email, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
+                })
+            })
+        }
+        else if(this.props.match.params.lender != "None") {
+            axios.get('https://val-cap-backend.herokuapp.com/lenderData/getLenderName/'+this.props.match.params.lender)
+            .then(response =>  {
+                this.setState({
+                    recieved: true,
+                    data: response.data.map(item => [item.lender, item.region, item.email, item.contact, item.phone, item.interestRange, item.minCreditScore, item.maxLTV, item.maxAmortization, item.maxLoanAmount, item.notes, item.loanType, item._id.toString()])
+                })
+            })
+            console.log("lender...")
+            console.log(this.state.data)
+        }
+        else if(this.props.match.params.loanTypes==="None-") {
             
             axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+this.props.match.params.region)
             .then(response => {
@@ -348,7 +387,8 @@ export default class DisplayData extends Component {
             .catch((error) => {
                 console.log(error);
             })
-        } else {
+        }
+        else {
             console.log(loanTypes)
             axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.match.params.region)
             .then(response => {
@@ -495,6 +535,8 @@ export default class DisplayData extends Component {
                         <div style = {{textAlign:"left"}}>
                             <strong>Search Results for:  </strong> 
                             <br></br>
+                            Lender: <strong> {this.props.match.params.lender} </strong>
+                            <br></br>
                             Loan Types: <strong>{this.props.match.params.loanTypes.substring(0,this.props.match.params.loanTypes.length-1).replaceAll("-", ", ")} </strong>
                             <br></br>
                             Region: <strong>{this.props.match.params.region}</strong> 
@@ -523,6 +565,7 @@ export default class DisplayData extends Component {
                                                     <th scope="col">Max LTV</th>
                                                     <th scope='col'> Max Amortization (years)</th>
                                                     <th scope='col'> Max Loan Amount</th>
+                                                    <th scope='col'> Loan Types</th>
                                                     <th scope="col">Notes</th>
                                                     {/* <th scope="col">Loan Types</th> */}
                                                 </tr>
@@ -583,24 +626,32 @@ export default class DisplayData extends Component {
                                                             {item[6] === ""  ?  "None" : item[6]}
                                                     
                                                     </td>
-                                                    <td>
+                                                    <td >
                                                             {item[7] === ""  ?  "None" : item[7]}
                                                     
                                                     </td>
-                                                    <td>
+                                                    <td >
                                                             {item[8] === ""  ?  "None" : item[8]}
                                                     
                                                     </td>
-                                                    <td>
+                                                    <td >
                                                             {item[9] === ""  ?  "None" : item[9]}
                                                     </td>
-                                                    <td>
+                                                    <td style={{wordWrap:'break-word', 'max-width':'200px'}}>
+                                                            {item[11].length===0 ? "None" :
+                                                                item[11].map((number) =>
+                                                                    <li>{number}</li>
+                                                            )}
+                                                            {/* {item[11] === ""  ?  "None" : item[11]} */}
+                                                    </td>
+                                                    <td style = {{'max-width':'200px'}} >
+                                                        <div class="container" style={{overflow:"auto"}}> 
                                                             {item[10] === ""  ?  "None" : item[10]}
+                                                        </div>
                                                     </td>
                                                     <td>
                                                         <button  style = {{float:'left'}} onClick = {() => this.onSendEdit(item)} type="button" class="btn btn-secondary btn-lg btn-block"> Edit
                                                         </button>
-
                                                     </td>
                                                     </tr> 
                                                 ))}

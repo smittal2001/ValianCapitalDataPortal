@@ -19,7 +19,7 @@ function App() {
       <Router>
         <Route exact path = "/"  component={LandingPage} />
         <Route path = "/queryData" component={LenderInfoData} />
-        <Route path = "/display/:region/:loanTypes"  component={DisplayData} />
+        <Route path = "/display/:region/:loanTypes/:lender"  component={DisplayData} />
         <Route path = "/addLenderData" component = {AddLenderData} />
         {/* <Route path = "/readfile" component = {ReadFile} /> */}
      </Router>
