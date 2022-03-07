@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Redirect } from "react-router-dom";
+import logo from '../images/landingLogo.png'
 
 export default class LandingPage extends Component {
     constructor(props) {
@@ -54,9 +55,13 @@ export default class LandingPage extends Component {
         }
         else {
             return (
-                <div className= "container" style={{padding:80}}>
-                    <h1 style = {{color:"white"}}>Welcome to the Lender Info Data Portal</h1>
-                    <div style={{width:"50%", padding:50, margin: "0 auto", backgroundColor: "white", transform: "translateY(40%)", borderRadius:10}}>
+                <div className= "container" style={{padding:30, background:"white", transform:"translateY(5%)", height:"600px"}}>
+                    
+                    <img src={logo} alt="Logo"  style={{width:'60%', height:"250px"}}/>
+                    {/* <h1 style = {{color:"white"}}>Welcome to the Lender Info Data Portal</h1> */}
+                    <div style={{width:"50%", padding:30, margin: "0 auto", backgroundColor: "white", transform:"translateX(-2%)", borderRadius:10}}>
+                        <h4 style = {{color:"black"}}>Welcome to the Lender Info Data Portal</h4>
+                        <br></br>
                         <form onSubmit = {this.onLogIn}>
                             <label  style= {{padding: 10}}>Password:</label>
                             <input
@@ -65,6 +70,7 @@ export default class LandingPage extends Component {
                                 type="password"
                                 onChange={this.onChangePassword}
                             />
+                            <br></br>
                             <br></br>
                             <input type="submit" value="Log In" className="btn btn-primary" />
                         </form>

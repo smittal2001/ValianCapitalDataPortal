@@ -623,7 +623,7 @@ export default class DisplayData extends Component {
                                                             {item[5] === ""  ?  "None" : item[5]}
                                                     </td>
                                                     <td>
-                                                            {item[6] === ""  ?  "None" : item[6]}
+                                                            {item[6] === null  ?  "None" : item[6]}
                                                     
                                                     </td>
                                                     <td >
@@ -631,13 +631,13 @@ export default class DisplayData extends Component {
                                                     
                                                     </td>
                                                     <td >
-                                                            {item[8] === ""  ?  "None" : item[8]}
+                                                            {item[8] === null  ?  "None" : item[8]}
                                                     
                                                     </td>
                                                     <td >
                                                             {item[9] === ""  ?  "None" : item[9]}
                                                     </td>
-                                                    <td style={{wordWrap:'break-word', 'max-width':'200px'}}>
+                                                    <td style={{overflow:'auto', 'max-width':'300px'}}>
                                                             {item[11].length===0 ? "None" :
                                                                 item[11].map((number) =>
                                                                     <li>{number}</li>

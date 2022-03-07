@@ -3,6 +3,8 @@ import { Col, Form, Row, Button } from "react-bootstrap";
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
 import {Link} from 'react-router-dom';
+import logo from '../images/homepagelogo.jpg'
+
 import "./searchBar.css";
 
 export default class LenderInfoData extends Component {
@@ -224,17 +226,18 @@ export default class LenderInfoData extends Component {
         return (
             <div style = {{  padding: 50}}>
                     <div className ="container" style = {{ backgroundColor: 'white', borderRadius:10, padding: 50}}>
-                <h1> Lender Info </h1> 
+                <h1> Search Lender Data </h1> 
+                <img src={logo} alt="Logo"  style={{width:'200px', height:"200px", transform: "translateY(-10%)" }}/>
                 <br></br>
-                <button  class="btn btn-grey btn-lg btn-block">  
+
+                <button  class="btn btn-grey btn-lg btn-block" style={{transform: "translateY(-60%)"}}>  
                         <Link to="/addLenderData" className="nav-link"> Click here to add Lender Data </Link> 
                 </button>
-                    
                
-                <form onSubmit={this.onSubmit} style = {{ padding: 15, textAlign: "left"}}>
+                <form onSubmit={this.onSubmit} style = {{ padding: 15, textAlign: "left", transform: "translateY(-10%)"}}>
                     <div className="search" >
                     <Form.Label style = {{ paddingTop: 15, textAlign: "left"}}><strong>Lender</strong></Form.Label>
-                    <Form.Control type="text" onKeyPress={this.onSubmit2} placeholder="Enter Lender" onChange={this.onChangeLender}  value={this.state.lender}/>
+                    <Form.Control type="text" onKeyPress={this.onSubmit2} placeholder="Search for Lender Name" onChange={this.onChangeLender}  value={this.state.lender}/>
                         {/* <div>
                             <input
                             type="text"
