@@ -14,7 +14,7 @@ function App() {
   return (
     <div className="App" >
       <Helmet>
-                <style>{'body { background-color: #98c541; }'}</style>
+                <style>{'body { background-color: rgb(30,19,67); }'}</style>
         </Helmet>
       <Router>
         <Route exact path = "/"  component={LandingPage} />

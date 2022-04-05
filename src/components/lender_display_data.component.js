@@ -527,9 +527,9 @@ export default class DisplayData extends Component {
         if(this.state.recieved) {
             return (
               
-                    <div style = {{  padding: 50}}>
+                    <div style = {{  padding: 50, color:'white'}}>
                           <Helmet>
-                            <style>{'body { background-color: #F8F0E3; }'}</style>
+                            <style>{'body { background-color: rgb(30,19,67); }'}</style>
                          </Helmet>
                     <div  >
                         <div style = {{textAlign:"left"}}>
@@ -549,10 +549,10 @@ export default class DisplayData extends Component {
                             <button  style = {{float:'right'}} onClick = {this.onSendEmails} type="button" class="btn btn-dark btn-lg btn-block">View Emails</button>   
                             <button  style = {{float:'right'}} onClick = {this.onSendPhone} type="button" class="btn btn-light btn-lg btn-block">View Phone Numbers</button>   
                             <br></br>
-                            <div style={{paddingTop:50}} > 
+                            <div style={{paddingTop:50, }} > 
                                 <Row >
                                     <Col sm={12}>
-                                        <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa", }} >
+                                        <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa", color:'white' }} >
                                             <thead>
                                                 <tr>
                                                     <th scope="col">Lender</th>

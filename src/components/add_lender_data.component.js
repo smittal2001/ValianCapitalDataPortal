@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Col, Form, Row } from "react-bootstrap";
+import logo from '../images/landingLogo.png'
 
 import axios from 'axios';
 
@@ -180,7 +181,8 @@ export default class AddLenderData extends Component {
         return (
              <div class="container" style = {{ backgroundColor: 'white', borderRadius:10, padding: 25}}>
                 <h3>Create New Lender Data </h3>
-                <form onSubmit={this.onSubmit}>
+                <img src={logo} alt="Logo"  style={{width:'60%', height:"250px"}}/>
+                <form onSubmit={this.onSubmit}>
                     <Row className="g-2">
                         <Form style = {{textAlign: "left"}}>
                             
