@@ -41,10 +41,11 @@ router.route('/getLenderName/:lender').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/get/:loanTypes/:region').get((req, res) => {
+router.route('/get/:loanTypes/:regions').get((req, res) => {
   const loanTypes = req.params.loanTypes.substring(0,req.params.loanTypes.length-1).split("-");
+  const regions = req.params.regions.substring(0,req.params.regions.length-1).split("-");
 
-  LenderInfo.find({ loanType: { $all: loanTypes }, region: req.params.region})
+  LenderInfo.find({ loanType: { $all: loanTypes }, region: { $all: regions }})
     .then(items => {
       res.json(items)
       console.log(req.params.region)
@@ -53,8 +54,11 @@ router.route('/get/:loanTypes/:region').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/get/:region').get((req, res) => {
-  LenderInfo.find({region: req.params.region})
+
+router.route('/get/:regions').get((req, res) => {
+  const regions = req.params.regions.substring(0,req.params.regions.length-1).split("-");
+
+  LenderInfo.find({region: { $all: regions }})
     .then(items => {
       res.json(items)
       console.log(req.params.region)

@@ -5,6 +5,8 @@ import { Redirect } from "react-router-dom";
 import {Link} from 'react-router-dom';
 // import logo from '../images/homepagelogo.jpg'
 import logo from '../images/landingLogo.png'
+// import Select from 'react-select'
+import Select from 'react-select'
 
 import "./searchBar.css";
 
@@ -55,10 +57,14 @@ export default class LenderInfoData extends Component {
         .then(response => {
             if(response.data.length > 0) {
                 this.setState({
-                    regions : response.data
+                    regions : response.data.map( (region) => ({
+                        "value" : region,
+                        "label" : region
+                      }))
                 })
             } 
-            this.state.regions.push("None") 
+            
+            console.log(this.state.regions)
         })
         .catch((error) => {
             console.log(error);
@@ -110,7 +116,7 @@ export default class LenderInfoData extends Component {
     onChangeRegion(e)
     {
         this.setState({
-            region: e.target.value
+            region: e.value
         });
     }
     onChangeUsername(e)
@@ -218,12 +224,17 @@ export default class LenderInfoData extends Component {
     }
 
     render() {
+        
     if(this.state.recieved) {
        return (  
         <Redirect to= { "/display/" + this.state.region + "/" + this.state.loanTypeList + "/" + this.state.searchLender } />
        )    
     }
     else {
+        // optionsArray.push(this.state.regions[4]);
+        
+        //console.log(optionsArray);        
+
         return (
             <div style = {{  padding: 50}}>
                     <div className ="container" style = {{ backgroundColor: 'white', borderRadius:10, padding: 50}}>
@@ -262,22 +273,13 @@ export default class LenderInfoData extends Component {
                     </div>
                     <br></br>
                     <label ><strong>Region</strong> </label>
-                    <select ref="userInput"
-                        required
-                        className="form-control"
-                        value={this.state.region}
+                    <br></br>
+                    <Select 
+                        options={this.state.regions} 
                         onChange={this.onChangeRegion}
-                        style = {{padding: 10}}>
-                        {
-                            this.state.regions.map(function(region) {
-                                return <option 
-                                    key={region}
-                                    value={region}>{region}
-                                    </option>;
-                                })
-                        }
-                    </select>
-                
+                        isMulti
+                    />
+                    
                     <Form.Label style = {{paddingTop: 10}}> <strong>Select Loan Types</strong>  </Form.Label>
                         <Row xs={3}>
                             {this.state.loanTypes.map((type) => (
