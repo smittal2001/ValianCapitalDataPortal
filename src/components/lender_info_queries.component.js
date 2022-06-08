@@ -27,6 +27,7 @@ export default class LenderInfoData extends Component {
         this.onChangePassword = this.onChangePassword.bind(this);
 
         this.state = {
+            selRegions: "None",
             regions: [],
             password: '',
             loggedIn: false,
@@ -84,18 +85,11 @@ export default class LenderInfoData extends Component {
 
       }
     
-    onChangeLoanType(e){
-        if(e.target.checked) {
-            this.state.loanTypeList += e.target.value + '-';
-        }
-        else {
-            var length = e.target.value.length;
-            var index = this.state.loanTypeList.indexOf(e.target.value)
-            if(index != -1){
-                this.state.loanTypeList = this.state.loanTypeList.substring(0,index) + this.state.loanTypeList.substring(index+length+1);
-                console.log("removed " + index + " " + this.state.loanTypeList.substring(0,index))
-            }
-        }
+    onChangeLoanType(selectedTypes){
+        this.state.loanTypeList = "";
+        selectedTypes.map( (loanType) => {
+            this.state.loanTypeList += loanType.value + '-';
+        })
         console.log(this.state.loanTypeList)
     }
 
@@ -113,11 +107,13 @@ export default class LenderInfoData extends Component {
         console.log(this.state.searchResponse)
     }
 
-    onChangeRegion(e)
+    onChangeRegion(selectedOptions)
     {
-        this.setState({
-            region: e.value
-        });
+        this.state.selRegions = "";
+        selectedOptions.map( (region) => {
+            this.state.selRegions += region.value + '-';
+        })
+        console.log(this.state.selRegions);
     }
     onChangeUsername(e)
     {
@@ -227,13 +223,14 @@ export default class LenderInfoData extends Component {
         
     if(this.state.recieved) {
        return (  
-        <Redirect to= { "/display/" + this.state.region + "/" + this.state.loanTypeList + "/" + this.state.searchLender } />
+        <Redirect to= { "/display/" + this.state.selRegions + "/" + this.state.loanTypeList + "/" + this.state.searchLender } />
        )    
     }
     else {
-        // optionsArray.push(this.state.regions[4]);
-        
-        //console.log(optionsArray);        
+        const loanTypesOptions = this.state.loanTypes.map( (loanType) => ({
+            "value" : loanType,
+            "label": loanType
+        }));    
 
         return (
             <div style = {{  padding: 50}}>
@@ -271,52 +268,63 @@ export default class LenderInfoData extends Component {
                             </div>
                         )}
                     </div>
-                    <br></br>
-                    <label ><strong>Region</strong> </label>
-                    <br></br>
-                    <Select 
-                        options={this.state.regions} 
-                        onChange={this.onChangeRegion}
-                        isMulti
-                    />
                     
-                    <Form.Label style = {{paddingTop: 10}}> <strong>Select Loan Types</strong>  </Form.Label>
-                        <Row xs={3}>
-                            {this.state.loanTypes.map((type) => (
-                                <div key={type} className="mb-3" >
+                    <div style = {{paddingTop: 30}}>
+                        <label><strong>Region</strong> </label>
+                        <Select 
+                            options={this.state.regions} 
+                            onChange={this.onChangeRegion}
+                            isMulti
+                        />
+                    </div>
+
+                    <div style = {{paddingTop: 30}}>
+                        <strong>Select Loan Types</strong>
+                        <Select 
+                            options={loanTypesOptions} 
+                            onChange={this.onChangeLoanType}
+                            isMulti
+                        />
+                    </div>
+                    
+                    
+                    {/* <Form.Label style = {{paddingTop: 10}}> <strong>Select Loan Types</strong>  </Form.Label>
+                    <Row xs={3}>
+                        {this.state.loanTypes.map((type) => (
+                            <div key={type} className="mb-3" >
+                            
+                                    <Col>
+                                    <input
+                                        inline
+                                        value = {type}
+                                        type="checkbox"
+                                        defaultChecked={false}
+                                        ref="complete"
+                                        onChange={this.onChangeLoanType}
+                                        
+                                    />
+                                    <label style={{padding: 5}}>
+                                    {type}
+                                    </label>
+                                    </Col>
                                 
-                                        <Col>
-                                        <input
-                                            inline
-                                            value = {type}
-                                            type="checkbox"
-                                            defaultChecked={false}
-                                            ref="complete"
-                                            onChange={this.onChangeLoanType}
-                                            
-                                        />
-                                        <label style={{padding: 5}}>
-                                        {type}
-                                        </label>
-                                        </Col>
-                                    
-                                </div>
-                            ))}
-                        </Row>
-                        <br></br>
-                        <div className="form-group" style = {{ textAlign: "center"}} >
-                        {/* <Row xs={2}> 
-                            <Col>
-                                <input  type="submit" value="Submit" className="btn btn-primary" />
-                            </Col>  
-                            <Col>
-                                <Button variant ="secondary" style={{ paddingLeft:15}}> Test </Button>
-                            </Col>  
-                        </Row> */}
-                        <input  type="submit" value="Submit" className="btn btn-primary" />
-                        <Button variant ="secondary" style={{transform:"translateX(30px)"}} onClick= {this.viewAllData}> View All Data </Button>
-                        
-                        
+                            </div>
+                        ))}
+                    </Row> */}
+                    <br></br>
+                    <div className="form-group" style = {{ textAlign: "center"}} >
+                    {/* <Row xs={2}> 
+                        <Col>
+                            <input  type="submit" value="Submit" className="btn btn-primary" />
+                        </Col>  
+                        <Col>
+                            <Button variant ="secondary" style={{ paddingLeft:15}}> Test </Button>
+                        </Col>  
+                    </Row> */}
+                    <input  type="submit" value="Submit" className="btn btn-primary" />
+                    <Button variant ="secondary" style={{transform:"translateX(30px)"}} onClick= {this.viewAllData}> View All Data </Button>
+                    
+                    
                     </div>
                 </form>
                 
