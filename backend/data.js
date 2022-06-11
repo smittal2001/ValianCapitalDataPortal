@@ -43,7 +43,7 @@ router.route('/getLenderName/:lender').get((req, res) => {
 
 router.route('/get/:loanTypes/:regions').get((req, res) => {
   const loanTypes = req.params.loanTypes.substring(0,req.params.loanTypes.length-1).split("-");
-  const regions = req.params.regions.substring(0,req.params.regions.length-1).split("-");
+  const regions = req.params.regions.substring(0,req.params.regions.length-1).split("+");
 
   LenderInfo.find({ loanType: { $all: loanTypes }, region: { $in: regions }})
     .then(items => {
@@ -56,8 +56,8 @@ router.route('/get/:loanTypes/:regions').get((req, res) => {
 
 
 router.route('/get/:regions').get((req, res) => {
-  const regions = req.params.regions.substring(0,req.params.regions.length-1).split("-");
-
+  const regions = req.params.regions.substring(0,req.params.regions.length-1).split("+");
+  
   LenderInfo.find({region: { $in: regions }})
     .then(items => {
       res.json(items)

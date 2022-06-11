@@ -60,11 +60,16 @@ export default class LenderInfoData extends Component {
                 this.setState({
                     regions : response.data.map( (region) => ({
                         "value" : region,
-                        "label" : region
+                        "label" : region === "-" || region === "" ? "No Region" : region
                       }))
                 })
             } 
-            
+            // const noneOpt = {
+            //     "value" : "None",
+            //     "label" : "No Region"
+            // }
+            // this.state.regions.unshift(noneOpt);
+            console.log(response.data)
             console.log(this.state.regions)
         })
         .catch((error) => {
@@ -111,7 +116,7 @@ export default class LenderInfoData extends Component {
     {
         this.state.selRegions = "";
         selectedOptions.map( (region) => {
-            this.state.selRegions += region.value + '-';
+            this.state.selRegions += region.value + '+';
         })
         console.log(this.state.selRegions);
     }
@@ -147,7 +152,7 @@ export default class LenderInfoData extends Component {
     viewAllData() {
         this.setState({
             searchLender: "View",
-            region: "All",
+            selRegions: "All",
             loanTypeList: "Data"
         })
         this.setState({

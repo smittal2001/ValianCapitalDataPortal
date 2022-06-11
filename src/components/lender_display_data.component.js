@@ -552,7 +552,7 @@ export default class DisplayData extends Component {
                             <div style={{paddingTop:50, }} > 
                                 <Row >
                                     <Col sm={12}>
-                                        <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa", color:'white' }} >
+                                        <table class="table" style= {{"borderWidth":"1px", 'borderColor':"#aaaaaa", color:'white'}} >
                                             <thead>
                                                 <tr>
                                                     <th scope="col">Lender</th>
@@ -578,12 +578,12 @@ export default class DisplayData extends Component {
                                                             {item[0] === ""  ?  "None" : item[0]}
                                                     </td>
                                                     <td>
-                                                            {item[1] === ""  ?  "None" : item[1]}
+                                                            {item[1] === "" || item[1] === "-" ?  "None" : item[1]}
                                                     </td>
                                                     <td>
                                                             {item[3] === ""  ?  "None" : item[3]}
                                                     </td>
-                                                    <td >
+                                                    <td style = {{width:'100px'}}>
                                                         {item[2] === ""  ?  "None" : 
                                                             <div>
                                                                 <input
