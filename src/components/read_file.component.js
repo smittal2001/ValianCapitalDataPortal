@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+require('dotenv').config()
+
 export default class Readfile extends Component {
   constructor(props) {
     super(props);
@@ -7123,7 +7125,7 @@ export default class Readfile extends Component {
         loanType: loanType
       }
       console.log(lenderData);
-      axios.post('https://val-cap-backend.herokuapp.com/lenderData/add', lenderData)
+      axios.post(`${process.env.REACT_APP_BACKEND}/lenderData/add`, lenderData)
           .then(res => console.log(res));
     }
   }

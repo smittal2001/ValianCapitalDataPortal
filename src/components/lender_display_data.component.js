@@ -4,7 +4,7 @@ import { Modal, Row, Col, Button, Form} from "react-bootstrap";
 import {Link} from 'react-router-dom'
 import {Helmet} from 'react-helmet';
 
-
+require('dotenv').config()
 
 export default class DisplayData extends Component {
     constructor(props) {
@@ -64,7 +64,7 @@ export default class DisplayData extends Component {
        
     }
     componentDidMount() {
-        axios.get('https://val-cap-backend.herokuapp.com/loanTypes/distinctLoanTypes')
+        axios.get(`${process.env.REACT_APP_BACKEND}/loanTypes/distinctLoanTypes`)
         .then(response => {
             if(response.data.length > 0) {
                 this.setState({
@@ -86,7 +86,7 @@ export default class DisplayData extends Component {
         loanTypes += loanTypesArr[loanTypesArr.length-1];
         console.log(this.props.match.params.loanTypes)
         if(this.props.match.params.lender === "View" && this.props.match.params.region==="All" && this.props.match.params.loanTypes==="Data") {
-            axios.get('https://val-cap-backend.herokuapp.com/lenderData/getAll')
+            axios.get(`${process.env.REACT_APP_BACKEND}/lenderData/getAll`)
             .then(response =>  {
                 this.setState({
                     recieved: true,
@@ -95,7 +95,7 @@ export default class DisplayData extends Component {
             })
         }
         else if(this.props.match.params.lender != "None") {
-            axios.get('https://val-cap-backend.herokuapp.com/lenderData/getLenderName/'+this.props.match.params.lender)
+            axios.get(`${process.env.REACT_APP_BACKEND}/lenderData/getLenderName/`+this.props.match.params.lender)
             .then(response =>  {
                 this.setState({
                     recieved: true,
@@ -107,7 +107,7 @@ export default class DisplayData extends Component {
         }
         else if(this.props.match.params.loanTypes==="None-") {
             
-            axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+this.props.match.params.region)
+            axios.get(`${process.env.REACT_APP_BACKEND}/lenderData/get/`+this.props.match.params.region)
             .then(response => {
                 if(response.data.length > 0) {
                     this.setState({
@@ -132,7 +132,7 @@ export default class DisplayData extends Component {
         else if(this.props.match.params.region ==="None"){
            
             console.log(loanTypes)
-            axios.get('https://val-cap-backend.herokuapp.com/lenderData/loanTypes/'+loanTypes)
+            axios.get(`${process.env.REACT_APP_BACKEND}/lenderData/loanTypes/`+loanTypes)
             .then(response => {
                 if(response.data.length > 0) {
                     this.setState({
@@ -155,8 +155,8 @@ export default class DisplayData extends Component {
             
         }
         else {
-            console.log('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.match.params.region)
-            axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.match.params.region)
+            console.log(`${process.env.REACT_APP_BACKEND}/lenderData/get/`+loanTypes+"/"+this.props.match.params.region)
+            axios.get(`${process.env.REACT_APP_BACKEND}/lenderData/get/`+loanTypes+"/"+this.props.match.params.region)
             .then(response => {
                 if(response.data.length > 0) {
                     this.setState({
@@ -321,7 +321,7 @@ export default class DisplayData extends Component {
         loanTypes += loanTypesArr[loanTypesArr.length-1];
         console.log(this.props.match.params.lender)
         if(this.props.match.params.lender === "View" && this.props.match.params.region==="All" && this.props.match.params.loanTypes==="Data") {
-            axios.get('https://val-cap-backend.herokuapp.com/lenderData/getAll')
+            axios.get(`${process.env.REACT_APP_BACKEND}/lenderData/getAll`)
             .then(response =>  {
                 this.setState({
                     recieved: true,
@@ -330,7 +330,7 @@ export default class DisplayData extends Component {
             })
         }
         else if(this.props.match.params.lender != "None") {
-            axios.get('https://val-cap-backend.herokuapp.com/lenderData/getLenderName/'+this.props.match.params.lender)
+            axios.get(`${process.env.REACT_APP_BACKEND}/lenderData/getLenderName/`+this.props.match.params.lender)
             .then(response =>  {
                 this.setState({
                     recieved: true,
@@ -342,7 +342,7 @@ export default class DisplayData extends Component {
         }
         else if(this.props.match.params.loanTypes==="None-") {
             
-            axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+this.props.match.params.region)
+            axios.get(`${process.env.REACT_APP_BACKEND}/lenderData/get/`+this.props.match.params.region)
             .then(response => {
                 if(response.data.length > 0) {
                     this.setState({
@@ -367,7 +367,7 @@ export default class DisplayData extends Component {
         else if(this.props.match.params.region==="None"){
            
             console.log(loanTypes)
-            axios.get('https://val-cap-backend.herokuapp.com/lenderData/loanTypes/'+loanTypes)
+            axios.get(`${process.env.REACT_APP_BACKEND}/lenderData/loanTypes/`+loanTypes)
             .then(response => {
                 if(response.data.length > 0) {
                     this.setState({
@@ -390,7 +390,7 @@ export default class DisplayData extends Component {
         }
         else {
             console.log(loanTypes)
-            axios.get('https://val-cap-backend.herokuapp.com/lenderData/get/'+loanTypes+"/"+this.props.match.params.region)
+            axios.get(`${process.env.REACT_APP_BACKEND}/lenderData/get/`+loanTypes+"/"+this.props.match.params.region)
             .then(response => {
                 if(response.data.length > 0) {
                     this.setState({
@@ -414,7 +414,7 @@ export default class DisplayData extends Component {
             
     }
     onDelete() {
-        axios.delete('https://val-cap-backend.herokuapp.com/lenderData/delete/' + this.state._id)
+        axios.delete(`${process.env.REACT_APP_BACKEND}/lenderData/delete/` + this.state._id)
                 .then(res => {
                         console.log(res.data)
                         this.setState({update:true});
@@ -478,7 +478,7 @@ export default class DisplayData extends Component {
             notes: this.state.notes,
             loanTypes: selectedLoans
         }
-        axios.post('https://val-cap-backend.herokuapp.com/lenderData/update/' + this.state._id, lenderData)
+        axios.post(`${process.env.REACT_APP_BACKEND}/lenderData/update/` + this.state._id, lenderData)
                 .then(res => console.log(res.data));
         this.setState({
             showEdit:false,

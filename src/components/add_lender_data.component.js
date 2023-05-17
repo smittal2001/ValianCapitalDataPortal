@@ -4,6 +4,8 @@ import logo from '../images/landingLogo.png'
 
 import axios from 'axios';
 
+require('dotenv').config()
+
 export default class AddLenderData extends Component {
     constructor(props) {
         super(props);
@@ -129,13 +131,13 @@ export default class AddLenderData extends Component {
     }
 
     onSubmit(e) {
-        e.preventDefault();
+        e.preventDefault();
         if(this.state.newLoanType != "") {
             this.state.loanTypes += this.state.newLoanType + '-';
             const loanType = {
                 loanType: this.state.newLoanType
             }
-            axios.post('https://val-cap-backend.herokuapp.com/loanTypes/add', loanType)
+            axios.post(`${process.env.REACT_APP_BACKEND}/loanTypes/add`, loanType)
                 .then(res => console.log(res.data));
         }
         
@@ -156,7 +158,7 @@ export default class AddLenderData extends Component {
             maxLoanAmt: this.state.maxLoanAmt,
             notes: this.state.notes
         }
-        axios.post('https://val-cap-backend.herokuapp.com/lenderData/add', lenderData)
+        axios.post(`${process.env.REACT_APP_BACKEND}/lenderData/add`, lenderData)
              .then(res => console.log(res.data));
         alert("Lender Data has been added");
         this.setState({

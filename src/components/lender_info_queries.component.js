@@ -10,6 +10,8 @@ import Select from 'react-select'
 
 import "./searchBar.css";
 
+require('dotenv').config()
+
 export default class LenderInfoData extends Component {
     constructor(props) {
         super(props);
@@ -54,7 +56,7 @@ export default class LenderInfoData extends Component {
     componentDidMount() {
         
         this.setState({});
-        axios.get('https://val-cap-backend.herokuapp.com/lenderData/getRegions')
+        axios.get(`${process.env.REACT_APP_BACKEND}/lenderData/getRegions`)
         .then(response => {
             if(response.data.length > 0) {
                 this.setState({
@@ -76,7 +78,7 @@ export default class LenderInfoData extends Component {
             console.log(error);
         })
         
-        axios.get('https://val-cap-backend.herokuapp.com/loanTypes/distinctLoanTypes')
+        axios.get(`${process.env.REACT_APP_BACKEND}/loanTypes/distinctLoanTypes`)
         .then(response => {
             if(response.data.length > 0) {
                 this.setState({
@@ -103,7 +105,7 @@ export default class LenderInfoData extends Component {
         this.setState({
             lender: e.target.value
         });
-        axios.get('https://val-cap-backend.herokuapp.com/lenderData/getLenderName/'+this.state.lender)
+        axios.get(`${process.env.REACT_APP_BACKEND}/lenderData/getLenderName/`+this.state.lender)
         .then(response =>  {
             this.setState({
                 searchResponse: response.data
