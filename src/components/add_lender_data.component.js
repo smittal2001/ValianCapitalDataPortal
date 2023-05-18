@@ -137,7 +137,11 @@ export default class AddLenderData extends Component {
             const loanType = {
                 loanType: this.state.newLoanType
             }
-            axios.post(`${process.env.REACT_APP_BACKEND}/loanTypes/add`, loanType)
+            axios.post(`${process.env.REACT_APP_BACKEND_URI}/loanTypes/add`, loanType, {
+        headers: {
+            Authorization: localStorage.getItem("token")
+        }
+    })
                 .then(res => console.log(res.data));
         }
         
@@ -158,7 +162,11 @@ export default class AddLenderData extends Component {
             maxLoanAmt: this.state.maxLoanAmt,
             notes: this.state.notes
         }
-        axios.post(`${process.env.REACT_APP_BACKEND}/lenderData/add`, lenderData)
+        axios.post(`${process.env.REACT_APP_BACKEND_URI}/lenderData/add`, lenderData, {
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        })
              .then(res => console.log(res.data));
         alert("Lender Data has been added");
         this.setState({

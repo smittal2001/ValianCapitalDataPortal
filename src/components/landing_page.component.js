@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Redirect } from "react-router-dom";
 import logo from '../images/landingLogo.png'
+import axios from 'axios';
 
 export default class LandingPage extends Component {
     constructor(props) {
@@ -33,20 +34,42 @@ export default class LandingPage extends Component {
             password: e.target.value
         });
     }
-    onLogIn(e) {
+    async onLogIn(e) {
         e.preventDefault();
-        console.log(this.state.loggedIn)
-        if(this.state.password === "Valiant1234!") {
-            this.setState({
-                loggedIn:true
+        const formData = [...new FormData(e.target)]
+            .reduce((a, [key, value]) => {
+                console.log(key, value)
+                a[key] = value;
+                return a;
+            }, {});
+        console.log(e, e.target[0].value)
+        const login = await axios.post(`${process.env.REACT_APP_BACKEND_URI}/login`, {password: e.target[0].value})
+            .then((res) => {
+                console.log(res)
+                if(res.data) {
+                    localStorage.setItem("token", res.data.token);
+                    this.setState({
+                        loggedIn:true
+                    });
+                }
+                else {
+                    alert("Invalid Password Try again")
+                    this.setState({
+                        password:''
+                    });
+                }
             });
-        }
-        else {
-            alert("Invalid Password Try again")
-            this.setState({
-                password:''
-            });
-        }
+        // if(this.state.password === "Valiant1234!") {
+        //     this.setState({
+        //         loggedIn:true
+        //     });
+        // }
+        // else {
+        //     alert("Invalid Password Try again")
+        //     this.setState({
+        //         password:''
+        //     });
+        // }
     }
 
     render() {

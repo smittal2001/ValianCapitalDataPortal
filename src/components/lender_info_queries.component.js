@@ -56,7 +56,11 @@ export default class LenderInfoData extends Component {
     componentDidMount() {
         
         this.setState({});
-        axios.get(`${process.env.REACT_APP_BACKEND}/lenderData/getRegions`)
+        axios.get(`${process.env.REACT_APP_BACKEND_URI}/lenderData/getRegions`, {
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        })
         .then(response => {
             if(response.data.length > 0) {
                 this.setState({
@@ -78,7 +82,11 @@ export default class LenderInfoData extends Component {
             console.log(error);
         })
         
-        axios.get(`${process.env.REACT_APP_BACKEND}/loanTypes/distinctLoanTypes`)
+        axios.get(`${process.env.REACT_APP_BACKEND_URI}/loanTypes/distinctLoanTypes`, {
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        })
         .then(response => {
             if(response.data.length > 0) {
                 this.setState({
@@ -105,7 +113,11 @@ export default class LenderInfoData extends Component {
         this.setState({
             lender: e.target.value
         });
-        axios.get(`${process.env.REACT_APP_BACKEND}/lenderData/getLenderName/`+this.state.lender)
+        axios.get(`${process.env.REACT_APP_BACKEND_URI}/lenderData/getLenderName/`+this.state.lender, {
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        })
         .then(response =>  {
             this.setState({
                 searchResponse: response.data
@@ -212,8 +224,7 @@ export default class LenderInfoData extends Component {
     }
     onLogIn(e) {
         e.preventDefault();
-        console.log(this.state.loggedIn)
-        if(this.state.password === "Valiant1234!") {
+        if(this.state.password === "") {
             this.setState({
                 loggedIn:true
             });
@@ -244,7 +255,7 @@ export default class LenderInfoData extends Component {
                     <div className ="container" style = {{ backgroundColor: 'white', borderRadius:10, padding: 50}}>
                 <h1> Search Lender Data </h1> 
                 {/* <img src={logo} alt="Logo"  style={{width:'200px', height:"200px", transform: "translateY(-10%)" }}/> */}
-                <img src={logo} alt="Logo"  style={{width:'60%', height:"250px"}}/>
+                <img src={logo} alt="Logo"  style={{width:'60%', height:"250px",  "object-fit":"contain"}}/>
                 <br></br>
                 
                 <button  class="btn btn-grey btn-lg btn-block" style={{transform: "translateY(-60%)"}}>  

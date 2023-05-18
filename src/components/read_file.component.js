@@ -7125,7 +7125,11 @@ export default class Readfile extends Component {
         loanType: loanType
       }
       console.log(lenderData);
-      axios.post(`${process.env.REACT_APP_BACKEND}/lenderData/add`, lenderData)
+      axios.post(`${process.env.REACT_APP_BACKEND_URI}/lenderData/add`, lenderData, {
+         headers: {
+             Authorization: localStorage.getItem("token")
+         }
+     })
           .then(res => console.log(res));
     }
   }
