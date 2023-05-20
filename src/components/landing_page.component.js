@@ -59,17 +59,6 @@ export default class LandingPage extends Component {
                     });
                 }
             });
-        // if(this.state.password === "Valiant1234!") {
-        //     this.setState({
-        //         loggedIn:true
-        //     });
-        // }
-        // else {
-        //     alert("Invalid Password Try again")
-        //     this.setState({
-        //         password:''
-        //     });
-        // }
     }
 
     render() {
